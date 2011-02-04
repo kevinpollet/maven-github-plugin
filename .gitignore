@@ -1,0 +1,10 @@
+#Ignore MacOs file
+.DS_Store
+
+#Ignore Maven folder
+target/
+
+#Ignore IntelliJ files
+*.ipr
+*.iws
+*.iml
