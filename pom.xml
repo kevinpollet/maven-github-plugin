@@ -99,4 +99,10 @@
         </plugins>
     </build>
 
+    <scm>
+        <url>https://github.com/kevinpollet/maven-github-plugin</url>
+        <connection>scm:git:git://github.com/kevinpollet/maven-github-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:kevinpollet/maven-github-plugin.git</developerConnection>
+    </scm>
+
 </project>
