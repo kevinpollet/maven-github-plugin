@@ -6,7 +6,7 @@ This maven plugin allows you to deploy your project ditribution artifacts to the
 
 h3. How to use it ?
 
-Coming soon...
+_Coming soon..._
 
 h3. Licence
 
