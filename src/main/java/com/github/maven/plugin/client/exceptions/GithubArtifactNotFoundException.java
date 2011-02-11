@@ -18,18 +18,17 @@ package com.github.maven.plugin.client.exceptions;
 /**
  * @author Kevin Pollet
  */
-public class GithubDownloadAlreadyExistException extends RuntimeException {
+public class GithubArtifactNotFoundException extends RuntimeException {
 
-	public GithubDownloadAlreadyExistException(String message) {
+	public GithubArtifactNotFoundException(String message) {
 		super( message );
 	}
 
-	public GithubDownloadAlreadyExistException(String message, Throwable cause) {
+	public GithubArtifactNotFoundException(String message, Throwable cause) {
 		super( message, cause );
 	}
 
-	public GithubDownloadAlreadyExistException(Throwable cause) {
+	public GithubArtifactNotFoundException(Throwable cause) {
 		super( cause );
 	}
-
 }

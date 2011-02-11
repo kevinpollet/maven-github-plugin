@@ -23,8 +23,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.maven.plugin.client.exceptions.GithubDownloadAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubDownloadNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
+import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
 import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import com.github.maven.plugin.util.Contract;
@@ -117,7 +117,7 @@ public class GithubClient {
 				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repository );
 			}
 			else if ( response == HttpStatus.SC_UNPROCESSABLE_ENTITY ) {
-				throw new GithubDownloadAlreadyExistException( "File " + file.getName() + "already exist in " + repository + " repository" );
+				throw new GithubArtifactAlreadyExistException( "File " + file.getName() + "already exist in " + repository + " repository" );
 			}
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
@@ -149,7 +149,7 @@ public class GithubClient {
 		);
 
 		if ( !downloads.containsKey( downloadName ) ) {
-			throw new GithubDownloadNotFoundException( "The download " + downloadName + " cannot be found in " + repository );
+			throw new GithubArtifactNotFoundException( "The download " + downloadName + " cannot be found in " + repository );
 		}
 
 		HttpClient client = new HttpClient();
