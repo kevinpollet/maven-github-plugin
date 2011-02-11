@@ -115,10 +115,10 @@
             <id>repo</id>
             <url>https://github.com/kevinpollet/maven-repository/tree/master/releases</url>
         </repository>
-        <repository>
+        <snapshotRepository>
             <id>snaphot-repo</id>
             <url>https://github.com/kevinpollet/maven-repository/tree/master/snapshots</url>
-        </repository>
+        </snapshotRepository>
     </distributionManagement>
 
 </project>
