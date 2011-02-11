@@ -77,7 +77,8 @@ public class GithubClient {
 						new NameValuePair( "login", login ),
 						new NameValuePair( "token", token ),
 						new NameValuePair( "file_name", file.getName() ),
-						new NameValuePair( "file_size", String.valueOf( file.length() ) )
+						new NameValuePair( "file_size", String.valueOf( file.length() ) ),
+						new NameValuePair( "description", description )
 				}
 		);
 
