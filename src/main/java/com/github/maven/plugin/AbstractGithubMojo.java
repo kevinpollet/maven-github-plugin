@@ -45,7 +45,6 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 */
 	private String token;
 
-
 	/**
 	 * @parameter expression="${github.repository}"
 	 * @required
