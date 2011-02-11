@@ -27,8 +27,8 @@ import org.apache.maven.plugin.MojoFailureException;
  * @goal list
  * @threadSafe
  */
-//TODO add support of proxy
-public class ListGithubRepositoryDownloadMojo extends AbstractGithubMojo {
+//TODO add Proxy support
+public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );

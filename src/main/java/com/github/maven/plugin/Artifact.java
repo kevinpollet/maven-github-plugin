@@ -26,6 +26,8 @@ public class Artifact {
 
 	private String description;
 
+	private boolean override;
+
 	public File getFile() {
 		return file;
 	}
@@ -34,4 +36,19 @@ public class Artifact {
 		return description;
 	}
 
+	public boolean getOverride() {
+		return override;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setOverride(boolean override) {
+		this.override = override;
+	}
 }

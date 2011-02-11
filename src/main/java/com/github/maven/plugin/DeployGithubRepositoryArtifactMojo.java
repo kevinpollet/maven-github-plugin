@@ -34,7 +34,8 @@ import org.apache.maven.project.MavenProject;
  * @phase deploy
  * @threadSafe
  */
-public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
+//TODO add Proxy support
+public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	/**
 	 * @parameter
@@ -42,31 +43,31 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 	private Artifact[] artifacts;
 
 	/**
-	 * @parameter expression="${github.upload.overrideExistingFile}" default-value=false
+	 * @parameter expression="${github.upload.overrideExistingArtifact}" default-value=false
 	 */
 	private boolean overrideExistingFile;
 
-	//TODO add support of proxy
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
 		try {
 
-			//by default upload artifacts matching ${project.artifactId}-${project.version}
+			//if no artifacts are configured deploy artifacts matching ${project.artifactId}-${project.version}
 			if ( artifacts == null ) {
 				File targetFolder = new File( getProject().getBasedir(), "target" );
-				File[] artifacts = targetFolder.listFiles( new DefaultArtifactsFilter() );
-				if ( artifacts != null ) {
-					for ( File artifact : artifacts ) {
-						uploadFile( artifact, getProject().getDescription() );
-					}
-				}
+				File[] targetFiles = targetFolder.listFiles( new DefaultArtifactsFilter() );
+				artifacts = new Artifact[ targetFiles.length ];
 
-			}//user specify files to upload
-			else {
-				for ( Artifact artifact : artifacts ) {
-					uploadFile( artifact.getFile(), artifact.getDescription() );
+				for ( int i = 0; i < targetFiles.length; i++ ) {
+					Artifact artifact = new Artifact();
+					artifact.setFile( targetFiles[i] );
+					artifact.setDescription( getProject().getDescription() );
+					artifact.setOverride( overrideExistingFile );
+
+					artifacts[i] = artifact;
 				}
 			}
+
+			uploadArtifacts( artifacts );
 
 		}
 		catch ( GithubRepositoryNotFoundException e ) {
@@ -84,16 +85,22 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 
 	}
 
-	private void uploadFile(File file, String description) {
+	private void uploadArtifacts(Artifact... artifacts) {
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
 		getLog().info( "" );
-		getLog().info( "Uploading [file=" + file.getName() + ", description=" + description + "]" );
-		if ( overrideExistingFile ) {
-			githubClient.replace( file.getName(), file, description, getRepository() );
-		}
-		else {
-			githubClient.upload( file, description, getRepository() );
+		for ( Artifact artifact : artifacts ) {
+			String artifactName = artifact.getFile().getName();
+			String artifactDescription = artifact.getDescription();
+			boolean override = artifact.getOverride();
+
+			getLog().info( "Uploading [file=" + artifactName + ", description=" + artifactDescription + ", override=" + override + "]" );
+			if ( artifact.getOverride() ) {
+				githubClient.replace( artifactName, artifact.getFile(), artifactDescription, getRepository() );
+			}
+			else {
+				githubClient.upload( artifact.getFile(),  artifactDescription, getRepository() );
+			}
 		}
 		getLog().info( "" );
 
