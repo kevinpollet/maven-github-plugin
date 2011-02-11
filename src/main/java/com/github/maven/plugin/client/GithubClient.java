@@ -24,8 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.github.maven.plugin.client.exceptions.GithubDownloadAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubDownloadNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import com.github.maven.plugin.util.Contract;
 import org.apache.commons.httpclient.HttpClient;
@@ -43,8 +43,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 /**
  * @author Kevin Pollet
  */
-//TODO client configuration proxy
-//TODO Use an object to map json response
 public class GithubClient {
 
 	private final static String GITHUB_S3_URL = "https://github.s3.amazonaws.com/";
@@ -78,7 +76,7 @@ public class GithubClient {
 						new NameValuePair( "token", token ),
 						new NameValuePair( "file_name", file.getName() ),
 						new NameValuePair( "file_size", String.valueOf( file.length() ) ),
-						new NameValuePair( "description", description )
+						new NameValuePair( "description", description == null ? "" : description )
 				}
 		);
 

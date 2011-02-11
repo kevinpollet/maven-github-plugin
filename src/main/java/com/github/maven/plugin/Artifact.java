@@ -51,4 +51,9 @@ public class Artifact {
 	public void setOverride(boolean override) {
 		this.override = override;
 	}
+
+	@Override
+	public String toString() {
+		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + "]";
+	}
 }

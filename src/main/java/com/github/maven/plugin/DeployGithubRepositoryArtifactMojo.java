@@ -85,21 +85,23 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	}
 
-	private void uploadArtifacts(Artifact... artifacts) {
+	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
 		getLog().info( "" );
 		for ( Artifact artifact : artifacts ) {
-			String artifactName = artifact.getFile().getName();
-			String artifactDescription = artifact.getDescription();
-			boolean override = artifact.getOverride();
+			if ( artifact.getFile() == null ) {
+				throw new MojoExecutionException( "Missing <file> into artifact configuration " );
+			}
 
-			getLog().info( "Uploading [file=" + artifactName + ", description=" + artifactDescription + ", override=" + override + "]" );
+			String artifactName = artifact.getFile().getName();
+
+			getLog().info( "Uploading " + artifact );
 			if ( artifact.getOverride() ) {
-				githubClient.replace( artifactName, artifact.getFile(), artifactDescription, getRepository() );
+				githubClient.replace( artifactName, artifact.getFile(), artifact.getDescription(), getRepository() );
 			}
 			else {
-				githubClient.upload( artifact.getFile(),  artifactDescription, getRepository() );
+				githubClient.upload( artifact.getFile(),  artifact.getDescription(), getRepository() );
 			}
 		}
 		getLog().info( "" );
