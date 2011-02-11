@@ -110,4 +110,15 @@
         <developerConnection>scm:git:git@github.com:kevinpollet/maven-github-plugin.git</developerConnection>
     </scm>
 
+    <distributionManagement>
+        <repository>
+            <id>repo</id>
+            <url>https://github.com/kevinpollet/maven-repository/tree/master/releases</url>
+        </repository>
+        <repository>
+            <id>snaphot-repo</id>
+            <url>https://github.com/kevinpollet/maven-repository/tree/master/snapshots</url>
+        </repository>
+    </distributionManagement>
+
 </project>
