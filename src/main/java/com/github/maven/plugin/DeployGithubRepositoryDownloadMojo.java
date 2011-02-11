@@ -46,7 +46,6 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 	 */
 	private boolean overrideExistingFile;
 
-	//TODO add support of overriding file
 	//TODO add files description
 	//TODO add support of proxy
 	public void execute() throws MojoExecutionException, MojoFailureException {
