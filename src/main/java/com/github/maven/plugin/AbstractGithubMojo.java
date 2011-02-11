@@ -17,6 +17,7 @@ package com.github.maven.plugin;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 
 /**
  * @author Kevin Pollet
@@ -24,6 +25,13 @@ import org.apache.maven.plugin.logging.Log;
 public abstract class AbstractGithubMojo extends AbstractMojo {
 
 	private Log logger;
+
+	/**
+	 * @parameter default-value="${project}"
+	 * @readonly
+	 * @required
+	 */
+	private MavenProject project;
 
 	/**
 	 * @parameter expression="${github.login}"
@@ -44,6 +52,7 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 */
 	private String repository;
 
+
 	public String getLogin() {
 		return login;
 	}
@@ -54,6 +63,10 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 
 	public String getRepository() {
 		return repository;
+	}
+
+	public MavenProject getProject() {
+		return project;
 	}
 
 }

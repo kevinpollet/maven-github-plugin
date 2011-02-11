@@ -16,14 +16,16 @@
 package com.github.maven.plugin;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 import com.github.maven.plugin.client.GithubClient;
 import com.github.maven.plugin.client.exceptions.GithubDownloadAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubDownloadNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 
 /**
  * Push distribution artifact into the download area of the configured Github project.
@@ -44,29 +46,24 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 	 */
 	private boolean overrideExistingFile;
 
-	//TODO add default artifact
 	//TODO add support of overriding file
 	//TODO add files description
 	//TODO add support of proxy
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
 		try {
 
-			if ( files != null ) {
-				for ( File file : files ) {
-					if ( !file.exists() ) {
-						throw new MojoExecutionException( "File " + file.getName() + " doesn't exist" );
-					}
-					else {
-						if ( overrideExistingFile ) {
-							githubClient.replace( file.getName(), file, "", getRepository() );
-						}
-						else {
-							githubClient.upload( file, "", getRepository() );
-						}
-					}
+			//by default upload artifacts matching ${project.artifactId}-${project.version}
+			if ( files == null ) {
+				File targetFolder = new File( getProject().getBasedir(), "target" );
+				File[] artifacts = targetFolder.listFiles( new DefaultArtifactsFilter() );
+				if ( artifacts != null ) {
+					uploadFiles( artifacts );
 				}
+
+			} //user specify files to upload
+			else {
+				uploadFiles( files );
 			}
 
 		}
@@ -85,4 +82,32 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 
 	}
 
+	private void uploadFiles(File... files) {
+		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
+
+		for ( File file : files ) {
+			if ( overrideExistingFile ) {
+				githubClient.replace( file.getName(), file, "", getRepository() );
+			}
+			else {
+				githubClient.upload( file, "", getRepository() );
+			}
+		}
+
+	}
+
+
+	class DefaultArtifactsFilter implements FilenameFilter {
+
+		public boolean accept(File dir, String name) {
+			final MavenProject project = getProject();
+			final String nameSuffix = String.format( "%s-%s", project.getArtifactId(), project.getVersion() );
+
+			return name != null && name.startsWith( nameSuffix );
+		}
+
+	}
+
 }
+
+
