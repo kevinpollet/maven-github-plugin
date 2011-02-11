@@ -85,7 +85,10 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 	private void uploadFiles(File... files) {
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
+		getLog().info( "" );
 		for ( File file : files ) {
+			getLog().info( "Uploading [" + file.getName() + "]" );
+
 			if ( overrideExistingFile ) {
 				githubClient.replace( file.getName(), file, "", getRepository() );
 			}
@@ -93,9 +96,9 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 				githubClient.upload( file, "", getRepository() );
 			}
 		}
+		getLog().info( "" );
 
 	}
-
 
 	class DefaultArtifactsFilter implements FilenameFilter {
 
