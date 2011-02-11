@@ -39,30 +39,33 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 	/**
 	 * @parameter
 	 */
-	private File[] files;
+	private Artifact[] artifacts;
 
 	/**
 	 * @parameter expression="${github.upload.overrideExistingFile}" default-value=false
 	 */
 	private boolean overrideExistingFile;
 
-	//TODO add files description
 	//TODO add support of proxy
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
 		try {
 
 			//by default upload artifacts matching ${project.artifactId}-${project.version}
-			if ( files == null ) {
+			if ( artifacts == null ) {
 				File targetFolder = new File( getProject().getBasedir(), "target" );
 				File[] artifacts = targetFolder.listFiles( new DefaultArtifactsFilter() );
 				if ( artifacts != null ) {
-					uploadFiles( artifacts );
+					for ( File artifact : artifacts ) {
+						uploadFile( artifact, getProject().getDescription() );
+					}
 				}
 
-			} //user specify files to upload
+			}//user specify files to upload
 			else {
-				uploadFiles( files );
+				for ( Artifact artifact : artifacts ) {
+					uploadFile( artifact.getFile(), artifact.getDescription() );
+				}
 			}
 
 		}
@@ -81,19 +84,16 @@ public class DeployGithubRepositoryDownloadMojo extends AbstractGithubMojo {
 
 	}
 
-	private void uploadFiles(File... files) {
+	private void uploadFile(File file, String description) {
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
 		getLog().info( "" );
-		for ( File file : files ) {
-			getLog().info( "Uploading [" + file.getName() + "]" );
-
-			if ( overrideExistingFile ) {
-				githubClient.replace( file.getName(), file, "", getRepository() );
-			}
-			else {
-				githubClient.upload( file, "", getRepository() );
-			}
+		getLog().info( "Uploading [file=" + file.getName() + ", description=" + description + "]" );
+		if ( overrideExistingFile ) {
+			githubClient.replace( file.getName(), file, description, getRepository() );
+		}
+		else {
+			githubClient.upload( file, description, getRepository() );
 		}
 		getLog().info( "" );
 
