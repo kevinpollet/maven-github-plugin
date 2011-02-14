@@ -12,8 +12,13 @@ Actually, I don't have an official maven repository. To use this plugin you have
 
 <pre>
   <pluginRepositories>
+	  <pluginRepository>
+          <id>releases</id>
+          <url>https://github.com/kevinpollet/maven-repository/raw/master/releases/</url>
+          <layout>default</layout>
+      </pluginRepository>
       <pluginRepository>
-          <id>snpashots-repo</id>
+          <id>snpashots</id>
           <url>https://github.com/kevinpollet/maven-repository/raw/master/snapshots</url>
           <layout>default</layout>
       </pluginRepository>
