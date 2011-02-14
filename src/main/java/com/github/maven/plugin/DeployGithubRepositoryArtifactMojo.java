@@ -16,7 +16,6 @@
 package com.github.maven.plugin;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
 import com.github.maven.plugin.client.GithubClient;
 import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
@@ -26,6 +25,7 @@ import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundExcepti
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * Push distribution artifact into the download area of the configured Github project.
@@ -48,21 +48,30 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	private boolean overrideExistingFile;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		MavenProject project = getProject();
 
 		try {
 
-			//if no artifacts are configured deploy artifacts matching ${project.artifactId}-${project.version}
+			//if no artifacts are configured deploy artifacts matching ${project.artifactId}-${project.version}*
 			if ( artifacts == null ) {
-				File targetFolder = new File( getProject().getBasedir(), "target" );
-				File[] targetFiles = targetFolder.listFiles( new DefaultArtifactsFilter() );
-				artifacts = new Artifact[ targetFiles.length ];
+				String outputDir = project.getBuild().getDirectory();
 
-				for ( int i = 0; i < targetFiles.length; i++ ) {
+				DirectoryScanner scanner = new DirectoryScanner();
+				scanner.setBasedir( outputDir );
+				scanner.setIncludes(
+						new String[] {
+								project.getArtifactId() + "-" + project.getVersion() + "*"
+						}
+				);
+				scanner.scan();
+
+				String[] files = scanner.getIncludedFiles();
+				artifacts = new Artifact[files.length];
+				for ( int i = 0; i < files.length; i++ ) {
 					Artifact artifact = new Artifact();
-					artifact.setFile( targetFiles[i] );
-					artifact.setDescription( getProject().getDescription() );
+					artifact.setFile( new File( outputDir, files[i] ) );
+					artifact.setDescription( project.getDescription() );
 					artifact.setOverride( overrideExistingFile );
-
 					artifacts[i] = artifact;
 				}
 			}
@@ -101,21 +110,10 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 				githubClient.replace( artifactName, artifact.getFile(), artifact.getDescription(), getRepository() );
 			}
 			else {
-				githubClient.upload( artifact.getFile(),  artifact.getDescription(), getRepository() );
+				githubClient.upload( artifact.getFile(), artifact.getDescription(), getRepository() );
 			}
 		}
 		getLog().info( "" );
-
-	}
-
-	class DefaultArtifactsFilter implements FilenameFilter {
-
-		public boolean accept(File dir, String name) {
-			final MavenProject project = getProject();
-			final String nameSuffix = String.format( "%s-%s", project.getArtifactId(), project.getVersion() );
-
-			return name != null && name.startsWith( nameSuffix );
-		}
 
 	}
 
