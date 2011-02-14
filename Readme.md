@@ -1,16 +1,14 @@
 What is it ?
 ============
 
-For each Github repository there is a download section which allows people to download project tags. Sometimes project has distribution artifacts which provide a functionnal application out of the box.
-
-This maven plugin allows you to deploy your project ditribution artifacts to the repository download section during the build process.
+For each Github repository there is a download section which allows people to download project tags. Sometimes project has distribution artifacts which provide a functionnal application out of the box. This maven plugin allows you to deploy your project ditribution artifacts to the repository download section during the build process.
 
 How to use it ?
 ---------------
 
-### Maven plugin repository
+### Configuration of Maven plugin repository
 
-Actually, I don't have an official maven repository. To use this plugin you have to add the following lines in your pom.xml or settings.xml file.
+Actually, I don't have an official maven repository. To use this plugin you have to add the following lines in your `pom.xml` or `settings.xml` file.
 
 
 	<pluginRepositories>
@@ -27,14 +25,41 @@ Actually, I don't have an official maven repository. To use this plugin you have
 	</pluginwepositories>
 
 
-### Available goals
+### Maven plugin available goals
 
-* maven-github-plugin:upload
+#### maven-github-plugin:upload
 
+* Default configuration
 
-* maven-github-plugin:list
+_By default this goal is bounded to the deploy phase_
 
-This aim of this goal is just to list the available github repository downloads. This goal is not bound to a lifecyle phase. To use this goal you have to add the configuration below in your `pom.xml`.
+* Specify artifacts to upload
+
+_By default this goal is not bounded to a lifecycle phase_
+
+    <plugin>
+    	<groupId>com.github.maven.plugin</groupId>
+    	<artifactId>maven-github-plugin</artifactId>
+    	<version>1.0-SNAPSHOT</version>
+    	<configuration>
+    		<login>YOUR_GITHUB_LOGIN</login>
+    		<token>YOUR_GITHUB_TOKEN</token>
+    		<repository>YOUR_GITHUB_REPOSITORY</repository>
+    		<artifacts>
+    			<artifact>
+    				<file>ABSOLUTE_ARTIFACT_PATH</file>
+    				<description>ARTIFACT_DESCRIPTION</description>
+    				<override>true|false</override> --> Default to false
+    			</artifact>
+    		<artifacts>
+    	</configuration>
+    </plugin>
+
+#### maven-github-plugin:list
+
+(_By default this goal is not bounded to a lifecycle phase_)
+
+This aim of this goal is just to list the available github repository downloads. To use this goal you have to add the configuration below in your `pom.xml`.
 
 	<plugin>
 		<groupId>com.github.maven.plugin</groupId>
@@ -49,14 +74,12 @@ This aim of this goal is just to list the available github repository downloads.
 
 FAQ
 ---
+ 
+* How keep secret your github token ?
 
-* How keep your github token secret?
+* How reporting a bug or request a new feature ?
 
-
-Reporting a bug
----------------
-
-To report an issue you just have to open it in the repository issue tracker.
+To report an issue or request a new feature you just have to open an issue in the repository issue tracker. After that you can add a label to it. Actually there two types of label _Bug_ and _Feature_
 
 Licence
 -------
