@@ -30,6 +30,7 @@ import org.apache.maven.plugin.logging.Log;
  *
  * @goal list
  * @threadSafe
+ * @requiresOnline true
  *
  * @author Kevin Pollet
  */

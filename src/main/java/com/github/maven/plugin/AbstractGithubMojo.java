@@ -18,6 +18,7 @@ package com.github.maven.plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
 
 /**
  * The Abstract Github Mojo class.
@@ -32,6 +33,13 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 * @required
 	 */
 	private MavenProject project;
+
+	/**
+	 * @parameter default-value="${settings}"
+	 * @readonly
+	 * @required
+	 */
+	private Settings settings;
 
 	/**
 	 * @parameter expression="${github.login}"
@@ -65,6 +73,10 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 
 	public MavenProject getProject() {
 		return project;
+	}
+
+	public Settings getSettings() {
+		return settings;
 	}
 
 }

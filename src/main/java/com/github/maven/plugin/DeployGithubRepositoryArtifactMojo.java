@@ -34,6 +34,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * @goal upload
  * @phase deploy
  * @threadSafe
+ * @requiresOnline true
  *
  * @author Kevin Pollet
  */
