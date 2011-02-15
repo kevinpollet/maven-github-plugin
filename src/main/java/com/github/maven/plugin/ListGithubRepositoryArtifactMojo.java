@@ -52,6 +52,7 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 			}
 			else {
 				logger.info( "Available downloads for [" + getRepository() + "]" );
+				logger.info( "" );
 				for ( String download : artifacts ) {
 					getLog().info( "* " + download );
 				}
