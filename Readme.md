@@ -55,7 +55,7 @@ After that you have to configure the goals of the maven plugin. If you are not f
 
 _By default this goal is bounded to the deploy phase_
 
-Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads all aartifacts in the build directory (by default `target`) who match the following expression `${project.artifactId}-${project.version}*`. If you want to exclude files just add the following configuration in your pom
+Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads all aartifacts in the build directory (by default `target`) who match the following expression `${project.artifactId}-${project.version}*.(jar|zip|tar.gz|tar.bz2)`. If you want to exclude files just add the following configuration in your pom
 
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
