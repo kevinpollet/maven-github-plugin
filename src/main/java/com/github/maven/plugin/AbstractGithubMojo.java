@@ -20,11 +20,11 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 
 /**
+ * The Abstract Github Mojo class.
+ *
  * @author Kevin Pollet
  */
 public abstract class AbstractGithubMojo extends AbstractMojo {
-
-	private Log logger;
 
 	/**
 	 * @parameter default-value="${project}"
@@ -50,7 +50,6 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 * @required
 	 */
 	private String repository;
-
 
 	public String getLogin() {
 		return login;

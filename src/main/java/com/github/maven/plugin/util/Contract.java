@@ -16,6 +16,8 @@
 package com.github.maven.plugin.util;
 
 /**
+ * An utility class to check that a method contract is fulfilled.
+ *
  * @author Kevin Pollet
  */
 public final class Contract {
@@ -24,6 +26,14 @@ public final class Contract {
 
 	}
 
+	/**
+	 * Assert that the given method parameter value is not {@code null}.
+	 *
+	 * @param param The value instance to check.
+	 * @param paramName The name of the parameter.
+	 *
+	 * @throws IllegalArgumentException if the given parameter value is {@code null}.
+	 */
 	public static void assertNotNull(Object param, String paramName) {
 		if ( param == null ) {
 			throw new IllegalArgumentException( "Parameter " + paramName + " cannot be null." );

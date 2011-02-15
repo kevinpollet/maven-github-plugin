@@ -29,13 +29,14 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Push distribution artifact into the download area of the configured Github project.
+ * Upload distribution artifacts into the download section of the configured github project.
  *
  * @goal upload
  * @phase deploy
  * @threadSafe
+ *
+ * @author Kevin Pollet
  */
-//TODO add Proxy support
 public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	/**
@@ -53,7 +54,9 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 */
 	private boolean overrideExistingFile;
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final MavenProject project = getProject();
 
@@ -112,6 +115,13 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	}
 
+	/**
+	 * Upload the given artifacts into the configured github repository.
+	 *
+	 * @param artifacts The artifacts to upload.
+	 *
+	 * @throws MojoExecutionException if artifacts are not properly configured.
+	 */
 	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
 		final Log log = getLog();
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );

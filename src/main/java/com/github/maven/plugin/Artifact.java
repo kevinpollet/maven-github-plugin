@@ -18,14 +18,27 @@ package com.github.maven.plugin;
 import java.io.File;
 
 /**
+ * The artifact definition.
+ *
  * @author Kevin Pollet
  */
 public class Artifact {
 
+	/**
+	 * The artifact file.
+	 */
 	private File file;
 
+	/**
+	 * The artifact description.
+	 */
 	private String description;
 
+	/**
+	 * Whether or not this artifact has to be overridden
+	 * if it already exists in the repository download
+	 * section.
+	 */
 	private boolean override;
 
 	public File getFile() {
