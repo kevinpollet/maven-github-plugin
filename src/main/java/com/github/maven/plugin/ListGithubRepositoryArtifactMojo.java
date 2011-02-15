@@ -22,27 +22,41 @@ import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 
 /**
+ * This goal allows to list the current available artifacts in the configured
+ * github repository.
+ *
  * @goal list
  * @threadSafe
+ *
+ * @author Kevin Pollet
  */
-//TODO add Proxy support
 public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		final Log logger = getLog();
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
 		try {
 
-			final Set<String> downloads = githubClient.listDownloads( getRepository() );
-			getLog().info("");
-			getLog().info( "Available downloads for [" + getRepository() + "]" );
-			getLog().info("");
-			for ( String download : downloads ) {
-				getLog().info( "* " + download );
+			final Set<String> artifacts = githubClient.listDownloads( getRepository() );
+
+			logger.info( "" );
+			if ( artifacts.isEmpty() ) {
+				logger.info( "No available downloads for [" + getRepository() + "]" );
 			}
-			getLog().info("");
+			else {
+				logger.info( "Available downloads for [" + getRepository() + "]" );
+				for ( String download : artifacts ) {
+					getLog().info( "* " + download );
+				}
+			}
+			logger.info( "" );
 
 		}
 		catch ( GithubRepositoryNotFoundException e ) {
