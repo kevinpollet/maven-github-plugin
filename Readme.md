@@ -2,7 +2,7 @@ Maven Github Plugin
 ===================
 
 - **Current version** : _1.0-SNAPSHOT_
-- **Deployed date** : _2/15/2011_
+- **Deployment date** : _2/15/2011_
 
 
 __This Maven plugin is under development do not use it inside production project.__
@@ -40,35 +40,37 @@ After that you have to configure the goals of the maven plugin. If you are not f
 
 #### maven-github-plugin:upload
 
-* Default configuration
+- Default configuration
 
-Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads all aartifacts in the build directory (by default `target`) who match the following expression `${project.artifactId}-${project.version}*.(jar|zip|tar.gz|tar.bz2)`. If you want to exclude files just add the following configuration in your pom
+Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads all aartifacts in the build directory (by default `target`) who match the following expression `${project.artifactId}-${project.version}*.(jar|zip|tar.gz|tar.bz2)`. If you want to exclude files just add the following configuration in your pom.
 
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
 		<token>YOUR_GITHUB_TOKEN</token>
 		<repository>YOUR_GITHUB_REPOSITORY</repository>
 		<excludes>
-			<exclude>*.zip</exclude> --> use default Maven filter expressions
+			<exclude>*.zip</exclude>
 		</excludes>
 	</configuration>
 	
-_By default this goal is bounded to the deploy phase_
+_by default this goal is bounded to the deploy phase_
 
-* Specify artifacts to upload
+- Specify artifacts to upload
 
-   	<configuration>
-   		<login>YOUR_GITHUB_LOGIN</login>
-   		<token>YOUR_GITHUB_TOKEN</token>
-   		<repository>YOUR_GITHUB_REPOSITORY</repository>
-   		<artifacts>
-   			<artifact>
-   				<file>ABSOLUTE_ARTIFACT_PATH</file>
-   				<description>ARTIFACT_DESCRIPTION</description>
-   				<override>true|false</override> --> Default to false
-   			</artifact>
-   		<artifacts>
-   	</configuration>
+To specify artifacts which have to be uploaded to the repository download section just add the following lines.
+
+	<configuration>
+		<login>YOUR_GITHUB_LOGIN</login>
+		<token>YOUR_GITHUB_TOKEN</token>
+		<repository>YOUR_GITHUB_REPOSITORY</repository>
+		<artifacts>
+			<artifact>
+				<file>ABSOLUTE_ARTIFACT_PATH</file>
+				<description>ARTIFACT_DESCRIPTION</description>
+				<override>true|false</override>
+			</artifact>
+		</artifacts>
+	</configuration>
 
 _by default this goal is not bounded to a lifecycle phase_
 
