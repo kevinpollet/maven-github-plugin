@@ -15,11 +15,11 @@ For each Github repository there is a download section which allows people to do
 How to use it ?
 ---------------
 
-### Configure Maven plugin repository
+### Configure plugin repository
 
-Currently, I don't have an official Maven repository. To use this plugin you have to configure my github Maven repository. To do that just have a look at [this](https://github.com/kevinpollet/maven-repository).
+Currently, I don't have an official Maven repository. To use this plugin you have to configure my github Maven repository. To do that, look at my [maven-repository](https://github.com/kevinpollet/maven-repository) project.
 	
-### Add Maven plugin to your build configuration
+### Add it in your build configuration
 
 To add the _maven-github-plugin_ in your project just add the following lines
 
@@ -36,7 +36,7 @@ To add the _maven-github-plugin_ in your project just add the following lines
 
 After that you have to configure the goals of the maven plugin. If you are not familiar with this step, look at [Maven documentation](http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html).
 
-### Maven plugin available goals
+### maven-github-plugin available goals
 
 #### maven-github-plugin:upload
 
