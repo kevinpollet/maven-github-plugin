@@ -39,7 +39,6 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * @author Kevin Pollet
  */
 public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
-
 	/**
 	 * @parameter
 	 */

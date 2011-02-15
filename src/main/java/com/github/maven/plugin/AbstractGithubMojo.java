@@ -15,10 +15,11 @@
  */
 package com.github.maven.plugin;
 
+import java.util.List;
+
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.Proxy;
 
 /**
  * The Abstract Github Mojo class.
@@ -26,7 +27,6 @@ import org.apache.maven.settings.Settings;
  * @author Kevin Pollet
  */
 public abstract class AbstractGithubMojo extends AbstractMojo {
-
 	/**
 	 * @parameter default-value="${project}"
 	 * @readonly
@@ -35,11 +35,11 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	private MavenProject project;
 
 	/**
-	 * @parameter default-value="${settings}"
+	 * @parameter default-value="${settings.proxies}"
 	 * @readonly
 	 * @required
 	 */
-	private Settings settings;
+	private List<Proxy> proxies;
 
 	/**
 	 * @parameter expression="${github.login}"
@@ -75,8 +75,20 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 		return project;
 	}
 
-	public Settings getSettings() {
-		return settings;
+	/**
+	 * Get the first active HTTPS proxy configured in
+	 * maven <em>settings.xml</em> file.
+	 *
+	 * @return The first active HTTPS proxy or {@code null}
+	 */
+	public Proxy getActiveHttpsProxy() {
+		for (Proxy proxy : proxies) {
+		   if (proxy.isActive() && "https".equalsIgnoreCase( proxy.getProtocol() ) ) {
+			   return proxy;
+		   }
+		}
+
+		return null;
 	}
 
 }

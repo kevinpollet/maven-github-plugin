@@ -21,7 +21,9 @@ package com.github.maven.plugin.util;
  * @author Kevin Pollet
  */
 public final class Contract {
-
+	/**
+	 * This Class cannot be instantiated.
+	 */
 	private Contract() {
 
 	}

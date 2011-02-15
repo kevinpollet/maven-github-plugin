@@ -35,7 +35,6 @@ import org.apache.maven.plugin.logging.Log;
  * @author Kevin Pollet
  */
 public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
-
 	/**
 	 * {@inheritDoc}
 	 */
