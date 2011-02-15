@@ -49,6 +49,8 @@ public class GithubClient {
 
 	private final static String GITHUB_DOWNLOADS_URL_FORMAT = "https://github.com/%s/%s/downloads";
 
+	private final HttpClient httpClient;
+
 	private final String login;
 
 	private final String token;
@@ -56,6 +58,7 @@ public class GithubClient {
 	public GithubClient(String login, String token) {
 		this.login = login;
 		this.token = token;
+		this.httpClient = new HttpClient();
 	}
 
 	public Set<String> listDownloads(String repository) {
@@ -68,7 +71,6 @@ public class GithubClient {
 
 		final String downloadsUrl = String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
 
-		HttpClient githubClient = new HttpClient();
 		PostMethod githubPost = new PostMethod( downloadsUrl );
 		githubPost.setRequestBody(
 				new NameValuePair[] {
@@ -82,7 +84,7 @@ public class GithubClient {
 
 		try {
 
-			int response = githubClient.executeMethod( githubPost );
+			int response = httpClient.executeMethod( githubPost );
 
 			if ( response == HttpStatus.SC_OK ) {
 
@@ -103,11 +105,10 @@ public class GithubClient {
 						new FilePart( "file", file )
 				};
 
-				HttpClient s3client = new HttpClient();
 				MultipartRequestEntity partEntity = new MultipartRequestEntity( parts, s3Post.getParams() );
 				s3Post.setRequestEntity( partEntity );
 
-				int s3Response = s3client.executeMethod( s3Post );
+				int s3Response = httpClient.executeMethod( s3Post );
 				if ( s3Response != HttpStatus.SC_CREATED ) {
 					throw new GithubException( "Cannot upload " + file.getName() + " to repository " + repository );
 				}
@@ -152,7 +153,6 @@ public class GithubClient {
 			throw new GithubArtifactNotFoundException( "The download " + downloadName + " cannot be found in " + repository );
 		}
 
-		HttpClient client = new HttpClient();
 		PostMethod githubDelete = new PostMethod( downloadUrl );
 		githubDelete.setRequestBody(
 				new NameValuePair[] {
@@ -164,7 +164,7 @@ public class GithubClient {
 
 		try {
 
-			int response = client.executeMethod( githubDelete );
+			int response = httpClient.executeMethod( githubDelete );
 			if ( response != HttpStatus.SC_MOVED_TEMPORARILY ) {
 				throw new GithubException( "Unexpected error" + HttpStatus.getStatusText( response ) );
 			}
@@ -181,7 +181,6 @@ public class GithubClient {
 
 		final String downloadsUrl = String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
 
-		HttpClient githubClient = new HttpClient();
 		GetMethod githubGet = new GetMethod( downloadsUrl );
 		githubGet.setQueryString(
 				new NameValuePair[] {
@@ -194,7 +193,7 @@ public class GithubClient {
 
 		try {
 
-			response = githubClient.executeMethod( githubGet );
+			response = httpClient.executeMethod( githubGet );
 		}
 		catch ( IOException e ) {
 			throw new GithubRepositoryNotFoundException(
