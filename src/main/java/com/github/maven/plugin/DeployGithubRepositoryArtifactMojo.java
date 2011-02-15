@@ -53,25 +53,31 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 */
 	private boolean overrideExistingFile;
 
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		MavenProject project = getProject();
+		final MavenProject project = getProject();
 
 		try {
 
 			//if no artifacts are configured deploy artifacts matching ${project.artifactId}-${project.version}*
 			if ( artifacts == null ) {
-				String outputDir = project.getBuild().getDirectory();
-				DirectoryScanner scanner = new DirectoryScanner();
+				final String outputDir = project.getBuild().getDirectory();
+				final String defaultArtifactStartName = project.getArtifactId() + "-" + project.getVersion();
+				final String[] includes = {
+						defaultArtifactStartName + "*.zip",
+						defaultArtifactStartName + "*.tar.gz",
+						defaultArtifactStartName + "*.tar.bz2",
+						defaultArtifactStartName + "*.jar"
+				};
+
+				final DirectoryScanner scanner = new DirectoryScanner();
 				scanner.setBasedir( outputDir );
-				scanner.setIncludes(
-						new String[] {
-								project.getArtifactId() + "-" + project.getVersion() + "*"
-						}
-				);
+				scanner.setCaseSensitive( true );
+				scanner.setIncludes( includes );
 				scanner.setExcludes( excludes );
 				scanner.scan();
 
-				String[] files = scanner.getIncludedFiles();
+				final String[] files = scanner.getIncludedFiles();
 				if ( files.length == 0 ) {
 					throw new MojoFailureException( "No artifacts to upload into repository " + getRepository() );
 				}
