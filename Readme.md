@@ -1,14 +1,17 @@
-What is it ?
-============
+Maven Github Plugin
+===================
 
-For each Github repository there is a download section which allows people to download project tags. Sometimes project has distribution artifacts which provide a functionnal application out of the box. This maven plugin allows you to deploy your project ditribution artifacts to the repository download section during the build process.
+_Last available version 1.0-SNAPSHOT_
 
 __This project is under development do not use it in your production project__
 
+What is it ?
+------------
+
+For each Github repository there is a download section which allows people to download project tags. Sometimes project has distribution assembly which provide a functionnal application out of the box. This maven plugin allows you to deploy your project ditribution assembly to the repository download section during the build process.
+
 How to use it ?
 ---------------
-
-_The last maven-github-plugin available version is 1.0-SNAPSHOT_
 
 ### Configure Maven plugin repository
 
@@ -29,14 +32,20 @@ Actually, I don't have an official maven repository. To use this plugin you have
 	
 ### Add Maven plugin to your build configuration
 
-	<plugin>
-	    <groupId>com.github.maven.plugin</groupId>
-	    <artifactId>maven-github-plugin</artifactId>
-	    <version>PLUGIN_VERSION</version>
-	    <configuration>
-	        //... Plugin configuration
-	    </configuration>
-	</plugin>	
+To add the _maven-github-plugin_ in your project just add the following lines
+
+	<build>
+		<plugins>
+   	 	   <plugin>
+   	 	       <groupId>com.github.maven.plugin</groupId>
+   	 	       <artifactId>maven-github-plugin</artifactId>
+   	 	       <version>PLUGIN_VERSION</version>
+   	 	       //... Plugin configuration
+   	 	   </plugin>
+		</plugins>
+	</build>
+
+After that you have to configure the goals of the maven plugin. If you are not familiar with this step, look at [Maven documentation](http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html).
 
 ### Maven plugin available goals
 
@@ -104,7 +113,6 @@ To report an issue or request a new feature you just have to open an issue in th
 
 Licence
 -------
-
 
 >Copyright 2011 Kevin Pollet
 
