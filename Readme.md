@@ -1,9 +1,11 @@
 Maven Github Plugin
 ===================
 
-_Last available version 1.0-SNAPSHOT_
+- **Current version** : _1.0-SNAPSHOT_
+- **Deployed date** : _2/15/2011_
 
-__This project is under development do not use it in your production project__
+
+__This Maven plugin is under development do not use it inside production project.__
 
 What is it ?
 ------------
@@ -15,20 +17,7 @@ How to use it ?
 
 ### Configure Maven plugin repository
 
-Actually, I don't have an official maven repository. To use this plugin you have to add the following lines in your `pom.xml` or `settings.xml` file.
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>releases</id>
-			<url>https://github.com/kevinpollet/maven-repository/raw/master/releases/</url>
-			<layout>default</layout>
-		</pluginRepository>
-		<pluginRepository>
-			<id>snpashots</id>
-			<url>https://github.com/kevinpollet/maven-repository/raw/master/snapshots</url>
-			<layout>default</layout>
-		</pluginRepository>
-	</pluginwepositories>
+Currently, I don't have an official Maven repository. To use this plugin you have to configure my github Maven repository. To do that just have a look at [this](https://github.com/kevinpollet/maven-repository).
 	
 ### Add Maven plugin to your build configuration
 
@@ -53,8 +42,6 @@ After that you have to configure the goals of the maven plugin. If you are not f
 
 * Default configuration
 
-_By default this goal is bounded to the deploy phase_
-
 Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads all aartifacts in the build directory (by default `target`) who match the following expression `${project.artifactId}-${project.version}*.(jar|zip|tar.gz|tar.bz2)`. If you want to exclude files just add the following configuration in your pom
 
 	<configuration>
@@ -65,11 +52,11 @@ Without any artifact configuration (see _Specify artifacts to upload_) the plugi
 			<exclude>*.zip</exclude> --> use default Maven filter expressions
 		</excludes>
 	</configuration>
+	
+_By default this goal is bounded to the deploy phase_
 
 * Specify artifacts to upload
 
-_By default this goal is not bounded to a lifecycle phase_
- 
    	<configuration>
    		<login>YOUR_GITHUB_LOGIN</login>
    		<token>YOUR_GITHUB_TOKEN</token>
@@ -83,9 +70,9 @@ _By default this goal is not bounded to a lifecycle phase_
    		<artifacts>
    	</configuration>
 
-#### maven-github-plugin:list
+_by default this goal is not bounded to a lifecycle phase_
 
-(_By default this goal is not bounded to a lifecycle phase_)
+#### maven-github-plugin:list
 
 This aim of this goal is just to list the available github repository downloads. To use this goal you have to add the configuration below in your `pom.xml`.
 
@@ -100,16 +87,18 @@ This aim of this goal is just to list the available github repository downloads.
 		</configuration>
 	</plugin>
 
+_by default this goal is not bounded to a lifecycle phase_
+
 FAQ
 ---
  
 * __How keep secret your github token__ ?
 
-A System property is associated to github token _String_. You can define it in the `settings.xml` file or by specifying the property on the command line like `mvn clean deploy -Dgithub.token=YOUR_GITHUB_TOKEN`.
+>A System property is associated to github token _String_. You can define it in the `settings.xml` file or by specifying the property on the command line like `mvn clean deploy -Dgithub.token=YOUR_GITHUB_TOKEN`.
 
 * __How report a bug or request a new feature__ ?
 
-To report an issue or request a new feature you just have to open an issue in the repository issue tracker. After that you can add a label to it. Actually there two types of label _Bug_ and _Feature_
+>To report an issue or request a new feature you just have to open an issue in the repository issue tracker. After that you can add a label to it. Actually there two types of label _Bug_ and _Feature_
 
 Licence
 -------
