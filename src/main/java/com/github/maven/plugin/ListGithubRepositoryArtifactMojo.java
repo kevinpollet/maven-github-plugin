@@ -48,14 +48,18 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 			if (getAlternativeLogin() != null)
 				githubClient.setAlternativeLogin(getAlternativeLogin());
 			
-			final Set<String> artifacts = githubClient.listDownloads( getRepository() );
+			String repository = getRepository();
+			
+			final Set<String> artifacts = githubClient.listDownloads( repository );
+			
+			logger.info( "Checking downloads for " + githubClient.getDownloadsUrl(repository));
 
 			logger.info( "" );
 			if ( artifacts.isEmpty() ) {
-				logger.info( "No available downloads for [" + getRepository() + "]" );
+				logger.info( "No available downloads for [" + repository + "]" );
 			}
 			else {
-				logger.info( "Available downloads for [" + getRepository() + "]" );
+				logger.info( "Available downloads for [" + repository + "]" );
 				logger.info( "" );
 				for ( String download : artifacts ) {
 					getLog().info( "* " + download );

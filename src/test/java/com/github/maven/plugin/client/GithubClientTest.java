@@ -38,4 +38,19 @@ public class GithubClientTest {
 		assertThat(downloadsUrl, IsEqual.equalTo("https://github.com/OTHERLOGIN/REPOSITORY/downloads"));
 		
 	}
+	
+	@Test
+	public void shouldReturnLoginAsRepositoryLoginIfAlternativeNotSet() {
+		GithubClient githubClient = new GithubClient("LOGIN", "TOKEN");
+		assertThat(githubClient.getRepositoryLogin(), IsEqual.equalTo("LOGIN"));
+	}
+	
+	@Test
+	public void shouldReturnAlternativeLoginAsRepositoryLoginIfAlternativeSet() {
+		GithubClient githubClient = new GithubClient("LOGIN", "TOKEN");
+		githubClient.setAlternativeLogin("ALTERNATIVELOGIN");
+		assertThat(githubClient.getRepositoryLogin(), IsEqual.equalTo("ALTERNATIVELOGIN"));
+	}
+	
+	// another option could be to have the repository as an absolute url "https://github.com/..." directly
 }

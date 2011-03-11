@@ -17,16 +17,17 @@ package com.github.maven.plugin;
 
 import java.io.File;
 
-import com.github.maven.plugin.client.GithubClient;
-import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
-import com.github.maven.plugin.client.exceptions.GithubException;
-import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
+
+import com.github.maven.plugin.client.GithubClient;
+import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
+import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubException;
+import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 
 /**
  * Upload distribution artifacts into the download section of the configured github project.
@@ -125,6 +126,9 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
 		final Log log = getLog();
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
+		
+		if (getAlternativeLogin() != null)
+			githubClient.setAlternativeLogin(getAlternativeLogin());
 
 		log.info( "" );
 		for ( Artifact artifact : artifacts ) {

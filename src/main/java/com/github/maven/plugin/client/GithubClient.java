@@ -151,7 +151,7 @@ public class GithubClient {
 
 		final Map<String, Integer> downloads = getDownloadsInfos( repository );
 		final String downloadUrl = String.format(
-				GITHUB_DOWNLOADS_URL_FORMAT + "/%d", login, repository, downloads.get( downloadName )
+				GITHUB_DOWNLOADS_URL_FORMAT + "/%d", getRepositoryLogin(), repository, downloads.get( downloadName )
 		);
 
 		if ( !downloads.containsKey( downloadName ) ) {
@@ -189,7 +189,7 @@ public class GithubClient {
 		GetMethod githubGet = new GetMethod( downloadsUrl );
 		githubGet.setQueryString(
 				new NameValuePair[] {
-						new NameValuePair( "login", login ),
+						new NameValuePair( "login", getRepositoryLogin() ),
 						new NameValuePair( "token", token )
 				}
 		);
@@ -223,7 +223,7 @@ public class GithubClient {
 
 			Pattern pattern = Pattern.compile(
 					String.format(
-							"<a href=\"(/downloads)?/%s/%s/([^\"]+)\"", login, repository
+							"<a href=\"(/downloads)?/%s/%s/([^\"]+)\"", getRepositoryLogin(), repository
 					)
 			);
 
@@ -256,10 +256,12 @@ public class GithubClient {
 
 	}
 
+	protected String getRepositoryLogin() {
+		return alternativeLogin == null ? login : alternativeLogin;
+	}
+
 	public String getDownloadsUrl(String repository) {
-		if (alternativeLogin != null)
-			return String.format( GITHUB_DOWNLOADS_URL_FORMAT, alternativeLogin, repository);
-		return String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
+		return String.format( GITHUB_DOWNLOADS_URL_FORMAT, getRepositoryLogin(), repository );
 	}
 
 	public void setAlternativeLogin(String alternativeLogin) {
