@@ -189,7 +189,7 @@ public class GithubClient {
 		GetMethod githubGet = new GetMethod( downloadsUrl );
 		githubGet.setQueryString(
 				new NameValuePair[] {
-						new NameValuePair( "login", getRepositoryLogin() ),
+						new NameValuePair( "login", login ),
 						new NameValuePair( "token", token )
 				}
 		);
