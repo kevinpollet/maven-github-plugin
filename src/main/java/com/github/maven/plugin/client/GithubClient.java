@@ -82,7 +82,7 @@ public class GithubClient {
 				new NameValuePair[] {
 						new NameValuePair( "login", login ),
 						new NameValuePair( "token", token ),
-						new NameValuePair( "file_name", file.getName() ),
+						new NameValuePair( "file_name", fileName ),
 						new NameValuePair( "file_size", String.valueOf( file.length() ) ),
 						new NameValuePair( "description", description == null ? "" : description )
 				}
@@ -116,7 +116,7 @@ public class GithubClient {
 
 				int s3Response = httpClient.executeMethod( s3Post );
 				if ( s3Response != HttpStatus.SC_CREATED ) {
-					throw new GithubException( "Cannot upload " + file.getName() + " to repository " + repository );
+					throw new GithubException( "Cannot upload " + file.getName() + " with name " + fileName + " to repository " + repository );
 				}
 
 			}
@@ -124,7 +124,7 @@ public class GithubClient {
 				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repository );
 			}
 			else if ( response == HttpStatus.SC_UNPROCESSABLE_ENTITY ) {
-				throw new GithubArtifactAlreadyExistException( "File " + file.getName() + "already exist in " + repository + " repository" );
+				throw new GithubArtifactAlreadyExistException( "File " + fileName + "already exist in " + repository + " repository" );
 			}
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
