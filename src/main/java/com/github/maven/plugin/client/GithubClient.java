@@ -141,7 +141,11 @@ public class GithubClient {
 		Contract.assertNotNull( description, "description" );
 		Contract.assertNotNull( repository, "repository" );
 
-		delete( repository, downloadName );
+		try {
+			delete( repository, downloadName );
+		}  catch (GithubArtifactNotFoundException ex) {
+			// replace should not fail if file was not found on server.
+		}
 		upload( file, description, repository );
 	}
 
