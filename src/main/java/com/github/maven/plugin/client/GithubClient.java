@@ -23,11 +23,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
-import com.github.maven.plugin.client.exceptions.GithubException;
-import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
-import com.github.maven.plugin.util.Contract;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
@@ -39,6 +34,12 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
+import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubException;
+import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
+import com.github.maven.plugin.util.Contract;
 
 /**
  * @author Kevin Pollet
@@ -55,10 +56,14 @@ public class GithubClient {
 
 	private final String token;
 
+	// by default the alternative login is null
+	private String alternativeLogin;
+
 	public GithubClient(String login, String token) {
 		this.login = login;
 		this.token = token;
 		this.httpClient = new HttpClient();
+		this.alternativeLogin = null;
 	}
 
 	public Set<String> listDownloads(String repository) {
@@ -69,7 +74,7 @@ public class GithubClient {
 		Contract.assertNotNull( repository, "repository" );
 		Contract.assertNotNull( file, "file" );
 
-		final String downloadsUrl = String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
+		final String downloadsUrl = getDownloadsUrl(repository);
 
 		PostMethod githubPost = new PostMethod( downloadsUrl );
 		githubPost.setRequestBody(
@@ -179,7 +184,7 @@ public class GithubClient {
 	private Map<String, Integer> getDownloadsInfos(String repository) {
 		Map<String, Integer> downloads = new HashMap<String, Integer>();
 
-		final String downloadsUrl = String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
+		final String downloadsUrl = getDownloadsUrl(repository);
 
 		GetMethod githubGet = new GetMethod( downloadsUrl );
 		githubGet.setQueryString(
@@ -249,6 +254,16 @@ public class GithubClient {
 
 		return downloads;
 
+	}
+
+	public String getDownloadsUrl(String repository) {
+		if (alternativeLogin != null)
+			return String.format( GITHUB_DOWNLOADS_URL_FORMAT, alternativeLogin, repository);
+		return String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
+	}
+
+	public void setAlternativeLogin(String alternativeLogin) {
+		this.alternativeLogin = alternativeLogin;
 	}
 
 }
