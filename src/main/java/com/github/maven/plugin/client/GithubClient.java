@@ -70,7 +70,8 @@ public class GithubClient {
 		return getDownloadsInfos( repository ).keySet();
 	}
 
-	public void upload(File file, String description, String repository) {
+	public void upload(String fileName, File file, String description, String repository) {
+
 		Contract.assertNotNull( repository, "repository" );
 		Contract.assertNotNull( file, "file" );
 
@@ -99,7 +100,7 @@ public class GithubClient {
 				PostMethod s3Post = new PostMethod( GITHUB_S3_URL );
 
 				Part[] parts = {
-						new StringPart( "Filename", file.getName() ),
+						new StringPart( "Filename", fileName ),
 						new StringPart( "policy", node.path( "policy" ).getTextValue() ),
 						new StringPart( "success_action_status", "201" ),
 						new StringPart( "key", node.path( "path" ).getTextValue() ),
@@ -146,7 +147,7 @@ public class GithubClient {
 		}  catch (GithubArtifactNotFoundException ex) {
 			// replace should not fail if file was not found on server.
 		}
-		upload( file, description, repository );
+		upload( downloadName, file, description, repository );
 	}
 
 	private void delete(String repository, String downloadName) {
