@@ -17,12 +17,13 @@ package com.github.maven.plugin;
 
 import java.util.Set;
 
-import com.github.maven.plugin.client.GithubClient;
-import com.github.maven.plugin.client.exceptions.GithubException;
-import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
+
+import com.github.maven.plugin.client.GithubClient;
+import com.github.maven.plugin.client.exceptions.GithubException;
+import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 
 /**
  * This goal allows to list the current available artifacts in the configured
@@ -43,7 +44,10 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
 
 		try {
-
+			
+			if (getAlternativeLogin() != null)
+				githubClient.setAlternativeLogin(getAlternativeLogin());
+			
 			final Set<String> artifacts = githubClient.listDownloads( getRepository() );
 
 			logger.info( "" );

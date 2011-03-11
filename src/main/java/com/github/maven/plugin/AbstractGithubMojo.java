@@ -59,6 +59,11 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 */
 	private String repository;
 
+	/**
+	 * @parameter expression="${github.alternativeLogin}"
+	 */
+	private String alternativeLogin;
+
 	public String getLogin() {
 		return login;
 	}
@@ -74,7 +79,11 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	public MavenProject getProject() {
 		return project;
 	}
-
+	
+	public String getAlternativeLogin() {
+		return alternativeLogin;
+	}
+	
 	/**
 	 * Get the first active HTTPS proxy configured in
 	 * maven <em>settings.xml</em> file.
