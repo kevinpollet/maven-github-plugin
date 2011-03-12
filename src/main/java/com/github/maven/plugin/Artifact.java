@@ -45,6 +45,27 @@ public class Artifact {
 	 */
 	private String finalName;
 
+	public Artifact() {
+	}
+
+	public Artifact(File file, String description, boolean override) {
+		this( file, description, override, null );
+	}
+
+	public Artifact(File file, String description, boolean override, String finalName) {
+		this.file = file;
+		this.description = description;
+		this.override = override;
+		this.finalName = finalName;
+	}
+
+	public String getName() {
+		if ( finalName == null ) {
+			return file.getName();
+		}
+		return finalName;
+	}
+
 	public File getFile() {
 		return file;
 	}
@@ -57,31 +78,11 @@ public class Artifact {
 		return override;
 	}
 
-	public void setFile(File file) {
-		this.file = file;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setOverride(boolean override) {
-		this.override = override;
-	}
-
-	public String getFinalName() {
-		return finalName;
-	}
-
-	public void setFinalName(String finalName) {
-		this.finalName = finalName;
-	}
-
 	@Override
 	public String toString() {
-		return "[file=" + file.getName() +
+		return "[artifactName=" + getName() +
 				", description=" + description +
 				", override=" + override +
-				", finalName=" + finalName + "]";
+				"]";
 	}
 }

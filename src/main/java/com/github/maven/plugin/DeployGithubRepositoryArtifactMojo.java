@@ -87,10 +87,9 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 				else {
 					artifacts = new Artifact[files.length];
 					for ( int i = 0; i < files.length; i++ ) {
-						Artifact artifact = new Artifact();
-						artifact.setFile( new File( outputDir, files[i] ) );
-						artifact.setDescription( project.getDescription() );
-						artifact.setOverride( overrideExistingFile );
+						Artifact artifact = new Artifact(
+								new File( outputDir, files[i] ), project.getDescription(), overrideExistingFile
+						);
 						artifacts[i] = artifact;
 					}
 				}
@@ -112,7 +111,6 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 		catch ( GithubException e ) {
 			throw new MojoExecutionException( "Unexpected error", e );
 		}
-
 	}
 
 	/**
@@ -132,24 +130,19 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 				throw new MojoExecutionException( "Missing <file> into artifact configuration " );
 			}
 
-			String fileName = artifact.getFile().getName();
-
-			if ( artifact.getFinalName() != null ) {
-				fileName = artifact.getFinalName();
-			}
-
 			log.info( "Uploading " + artifact );
 			if ( artifact.getOverride() ) {
 				githubClient.replace(
-						fileName, artifact.getFile(), artifact.getDescription(), getRepository()
+						artifact.getName(), artifact.getFile(), artifact.getDescription(), getRepository()
 				);
 			}
 			else {
-				githubClient.upload( fileName, artifact.getFile(), artifact.getDescription(), getRepository() );
+				githubClient.upload(
+						artifact.getName(), artifact.getFile(), artifact.getDescription(), getRepository()
+				);
 			}
 		}
 		log.info( "" );
 	}
-
 }
 
