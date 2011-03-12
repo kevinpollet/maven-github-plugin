@@ -131,14 +131,20 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 			if ( artifact.getFile() == null ) {
 				throw new MojoExecutionException( "Missing <file> into artifact configuration " );
 			}
+			
+			String fileName = artifact.getFile().getName();
+			
+			if (artifact.getAlternativeFileName() != null)
+				fileName = artifact.getAlternativeFileName();
+			
 			log.info( "Uploading " + artifact );
 			if ( artifact.getOverride() ) {
 				githubClient.replace(
-						artifact.getFile().getName(), artifact.getFile(), artifact.getDescription(), getRepository()
+						fileName, artifact.getFile(), artifact.getDescription(), getRepository()
 				);
 			}
 			else {
-				githubClient.upload( artifact.getFile(), artifact.getDescription(), getRepository() );
+				githubClient.upload( fileName, artifact.getFile(), artifact.getDescription(), getRepository() );
 			}
 		}
 		log.info( "" );

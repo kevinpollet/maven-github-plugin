@@ -15,6 +15,9 @@
  */
 package com.github.maven.plugin.client;
 
+import static com.github.maven.plugin.util.Contract.assertNotNull;
+import static com.github.maven.plugin.util.Contract.assertStartsWith;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,11 +26,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
-import com.github.maven.plugin.client.exceptions.GithubException;
-import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
-import com.github.maven.plugin.util.Contract;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
@@ -40,8 +38,10 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import static com.github.maven.plugin.util.Contract.assertNotNull;
-import static com.github.maven.plugin.util.Contract.assertStartsWith;
+import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
+import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubException;
+import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 
 /**
  * @author Kevin Pollet
@@ -92,7 +92,7 @@ public class GithubClient {
 	 * @param description The description of the file to upload.
 	 * @param repositoryUrl The repository url.
 	 */
-	public void upload(File file, String description, String repositoryUrl) {
+	public void upload(String fileName, File file, String description, String repositoryUrl) {
 		assertNotNull( file, "file" );
 		assertNotNull( repositoryUrl, "repositoryUrl" );
 		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
@@ -120,7 +120,7 @@ public class GithubClient {
 				PostMethod s3Post = new PostMethod( GITHUB_S3_URL );
 
 				Part[] parts = {
-						new StringPart( "Filename", file.getName() ),
+						new StringPart( "Filename", fileName ),
 						new StringPart( "policy", node.path( "policy" ).getTextValue() ),
 						new StringPart( "success_action_status", "201" ),
 						new StringPart( "key", node.path( "path" ).getTextValue() ),
@@ -171,12 +171,10 @@ public class GithubClient {
 
 		try {
 			delete( repositoryUrl, downloadName );
+		}  catch (GithubArtifactNotFoundException ex) {
+			// replace should not fail if file was not found on server.
 		}
-		catch ( GithubArtifactNotFoundException ex ) {
-			//nothing to do, replacing a missing file is valid
-		}
-
-		upload( file, description, repositoryUrl );
+		upload( downloadName, file, description, repositoryUrl );
 	}
 
 	/**

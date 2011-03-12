@@ -19,7 +19,7 @@ import java.io.File;
 
 /**
  * The artifact definition.
- *
+ * 
  * @author Kevin Pollet
  */
 public class Artifact {
@@ -35,11 +35,14 @@ public class Artifact {
 	private String description;
 
 	/**
-	 * Whether or not this artifact has to be overridden
-	 * if it already exists in the repository download
-	 * section.
+	 * Whether or not this artifact has to be overridden if it already exists in the repository download section.
 	 */
 	private boolean override;
+
+	/**
+	 * If you want to upload the file with another name.
+	 */
+	private String alternativeFileName;
 
 	public File getFile() {
 		return file;
@@ -65,8 +68,16 @@ public class Artifact {
 		this.override = override;
 	}
 
+	public String getAlternativeFileName() {
+		return alternativeFileName;
+	}
+
+	public void setAlternativeFileName(String alternativeFileName) {
+		this.alternativeFileName = alternativeFileName;
+	}
+
 	@Override
 	public String toString() {
-		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + "]";
+		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + ", alternativeFileName=" + alternativeFileName + "]";
 	}
 }
