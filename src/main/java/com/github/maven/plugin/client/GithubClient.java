@@ -246,7 +246,7 @@ public class GithubClient {
 		}
 		catch ( IOException e ) {
 			throw new GithubRepositoryNotFoundException(
-					"Cannot retrieve github repositoryUrl " + repositoryUrl + " informations", e
+					"Cannot retrieve github repository " + repositoryUrl + " informations", e
 			);
 		}
 
