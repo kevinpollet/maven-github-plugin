@@ -19,7 +19,7 @@ import java.io.File;
 
 /**
  * The artifact definition.
- * 
+ *
  * @author Kevin Pollet
  */
 public class Artifact {

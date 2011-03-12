@@ -15,9 +15,6 @@
  */
 package com.github.maven.plugin.client;
 
-import static com.github.maven.plugin.util.Contract.assertNotNull;
-import static com.github.maven.plugin.util.Contract.assertStartsWith;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,6 +23,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
+import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
+import com.github.maven.plugin.client.exceptions.GithubException;
+import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
@@ -38,10 +39,8 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
-import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
-import com.github.maven.plugin.client.exceptions.GithubException;
-import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
+import static com.github.maven.plugin.util.Contract.assertNotNull;
+import static com.github.maven.plugin.util.Contract.assertStartsWith;
 
 /**
  * @author Kevin Pollet
@@ -171,7 +170,8 @@ public class GithubClient {
 
 		try {
 			delete( repositoryUrl, downloadName );
-		}  catch (GithubArtifactNotFoundException ex) {
+		}
+		catch ( GithubArtifactNotFoundException ex ) {
 			// replace should not fail if file was not found on server.
 		}
 		upload( downloadName, file, description, repositoryUrl );
@@ -181,7 +181,6 @@ public class GithubClient {
 	 * Removes the given download from the repository download section.
 	 *
 	 * @param repositoryUrl The repository url.
-	 *
 	 * @param downloadName The download name.
 	 */
 	private void delete(String repositoryUrl, String downloadName) {

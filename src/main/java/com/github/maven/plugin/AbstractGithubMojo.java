@@ -82,10 +82,10 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 * @return The first active HTTPS proxy or {@code null}
 	 */
 	public Proxy getActiveHttpsProxy() {
-		for (Proxy proxy : proxies) {
-		   if (proxy.isActive() && "https".equalsIgnoreCase( proxy.getProtocol() ) ) {
-			   return proxy;
-		   }
+		for ( Proxy proxy : proxies ) {
+			if ( proxy.isActive() && "https".equalsIgnoreCase( proxy.getProtocol() ) ) {
+				return proxy;
+			}
 		}
 
 		return null;
