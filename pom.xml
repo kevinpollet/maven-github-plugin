@@ -27,6 +27,23 @@
 
     <name>Maven Github plugin</name>
 
+    <scm>
+        <url>https://github.com/kevinpollet/maven-github-plugin</url>
+        <connection>scm:git:git://github.com/kevinpollet/maven-github-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:kevinpollet/maven-github-plugin.git</developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>https://github.com/kevinpollet/maven-repository/raw/master/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>https://github.com/kevinpollet/maven-repository/raw/master/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <developers>
         <developer>
             <name>Kevin Pollet</name>
@@ -36,6 +53,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <compiler.source.version>1.5</compiler.source.version>
+        <compiler.target.version>1.5</compiler.target.version>
     </properties>
 
     <dependencies>
@@ -81,6 +100,15 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${compiler.source.version}</source>
+                    <source>${compiler.target.version}</source>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <version>1.9.0</version>
@@ -108,22 +136,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <scm>
-        <url>https://github.com/kevinpollet/maven-github-plugin</url>
-        <connection>scm:git:git://github.com/kevinpollet/maven-github-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:kevinpollet/maven-github-plugin.git</developerConnection>
-    </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <url>https://github.com/kevinpollet/maven-repository/raw/master/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <url>https://github.com/kevinpollet/maven-repository/raw/master/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
