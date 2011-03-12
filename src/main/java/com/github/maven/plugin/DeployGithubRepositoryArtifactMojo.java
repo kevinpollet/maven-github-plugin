@@ -134,8 +134,8 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 			
 			String fileName = artifact.getFile().getName();
 			
-			if (artifact.getAlternativeFileName() != null)
-				fileName = artifact.getAlternativeFileName();
+			if (artifact.getFileName() != null)
+				fileName = artifact.getFileName();
 			
 			log.info( "Uploading " + artifact );
 			if ( artifact.getOverride() ) {
