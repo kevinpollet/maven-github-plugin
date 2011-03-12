@@ -27,6 +27,13 @@
 
     <name>Maven Github plugin</name>
 
+    <licenses>
+        <license>
+            <name>Apache Licence, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+
     <scm>
         <url>https://github.com/kevinpollet/maven-github-plugin</url>
         <connection>scm:git:git://github.com/kevinpollet/maven-github-plugin.git</connection>
