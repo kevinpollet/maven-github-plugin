@@ -23,7 +23,6 @@ import java.io.File;
  * @author Kevin Pollet
  */
 public class Artifact {
-
 	/**
 	 * The artifact file.
 	 */
@@ -44,7 +43,7 @@ public class Artifact {
 	 * Lets you modify the Github name of the uploaded file,
 	 * by default {@code File#getName()} will be used.
 	 */
-	private String fileName;
+	private String finalName;
 
 	public File getFile() {
 		return file;
@@ -70,12 +69,12 @@ public class Artifact {
 		this.override = override;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getFinalName() {
+		return finalName;
 	}
 
-	public void setFileName(String alternativeFileName) {
-		this.fileName = alternativeFileName;
+	public void setFinalName(String finalName) {
+		this.finalName = finalName;
 	}
 
 	@Override
@@ -83,6 +82,6 @@ public class Artifact {
 		return "[file=" + file.getName() +
 				", description=" + description +
 				", override=" + override +
-				", fileName=" + fileName + "]";
+				", finalName=" + finalName + "]";
 	}
 }
