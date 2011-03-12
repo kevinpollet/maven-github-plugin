@@ -93,7 +93,7 @@ FAQ
 
 * __How report a bug or request a new feature__ ?
 
->To report an issue or request a new feature you just have to open an issue in the repository issue tracker. After that you can add a label to it. Actually there two types of label _Bug_ and _Feature_
+>To report an issue or request a new feature you just have to open an issue in the repository issue tracker. After that you can add a label to it. Currently there is two label __Bug__ and __Feature__.
 		
 How contribute
 --------------
@@ -103,7 +103,7 @@ To contribute, follow this steps:
  1. Fork this project
  2. Add the progress label to the issue you want to solve (add a comments to say that you work on it)
  3. Create a topic branch for this issue
- 4. When you have finish your work, open a pull request (use issue title for pull request title)
+ 4. When you have finish your work, open a pull request (use the issue title for the pull request title)
 
 Licence
 -------
