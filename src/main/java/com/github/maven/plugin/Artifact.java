@@ -35,12 +35,14 @@ public class Artifact {
 	private String description;
 
 	/**
-	 * Whether or not this artifact has to be overridden if it already exists in the repository download section.
+	 * Whether or not this artifact has to be overridden
+	 * if it already exists in the repository download section.
 	 */
 	private boolean override;
 
 	/**
-	 * Lets you modify the Github name of the uploaded file, by default file.getName() will be used.
+	 * Lets you modify the Github name of the uploaded file,
+	 * by default {@code File#getName()} will be used.
 	 */
 	private String fileName;
 
@@ -78,6 +80,9 @@ public class Artifact {
 
 	@Override
 	public String toString() {
-		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + ", fileName=" + fileName + "]";
+		return "[file=" + file.getName() +
+				", description=" + description +
+				", override=" + override +
+				", fileName=" + fileName + "]";
 	}
 }
