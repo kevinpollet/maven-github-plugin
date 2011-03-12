@@ -78,6 +78,6 @@ public class Artifact {
 
 	@Override
 	public String toString() {
-		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + ", alternativeFileName=" + fileName + "]";
+		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + ", fileName=" + fileName + "]";
 	}
 }
