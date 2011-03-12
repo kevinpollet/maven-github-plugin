@@ -2,7 +2,7 @@ Maven Github Plugin
 ===================
 
 - **Current version** : _1.0-SNAPSHOT_
-- **Deployment date** : _2/15/2011_
+- **Deployment date** : _03/12/2011_
 
 
 __This Maven plugin is under development do not use it inside production project.__
