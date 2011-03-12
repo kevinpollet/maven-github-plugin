@@ -8,3 +8,8 @@ target/
 *.ipr
 *.iws
 *.iml
+
+# ignore Eclipse generated files
+.settings
+.project
+.classpath
