@@ -40,9 +40,9 @@ public class Artifact {
 	private boolean override;
 
 	/**
-	 * If you want to upload the file with another name.
+	 * Lets you modify the Github name of the uploaded file, by default file.getName() will be used.
 	 */
-	private String alternativeFileName;
+	private String fileName;
 
 	public File getFile() {
 		return file;
@@ -68,16 +68,16 @@ public class Artifact {
 		this.override = override;
 	}
 
-	public String getAlternativeFileName() {
-		return alternativeFileName;
+	public String getFileName() {
+		return fileName;
 	}
 
-	public void setAlternativeFileName(String alternativeFileName) {
-		this.alternativeFileName = alternativeFileName;
+	public void setFileName(String alternativeFileName) {
+		this.fileName = alternativeFileName;
 	}
 
 	@Override
 	public String toString() {
-		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + ", alternativeFileName=" + alternativeFileName + "]";
+		return "[file=" + file.getName() + ", description=" + description + ", override=" + override + ", alternativeFileName=" + fileName + "]";
 	}
 }
