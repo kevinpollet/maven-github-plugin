@@ -45,13 +45,35 @@ public class Artifact {
 	 */
 	private String finalName;
 
+	/**
+	 * Default constructor. Only used by maven
+	 * for instantiation to allow field injection.
+	 */
 	public Artifact() {
 	}
 
+	/**
+	 * Constructs an artifact with the given
+	 * parameters. The name used in the download
+	 * section is the file name.
+	 *
+	 * @param file The file to upload.
+	 * @param description The uploaded file description.
+	 * @param override Whether or not this artifact can be overridden.
+	 */
 	public Artifact(File file, String description, boolean override) {
 		this( file, description, override, null );
 	}
 
+	/**
+	 * Constructs an artifact with the given
+	 * parameters.
+	 *
+	 * @param file The file to upload.
+	 * @param description The uploaded file description.
+	 * @param override Whether or not this artifact can be overridden.
+	 * @param finalName The name used in the download section. If {@code null} the file name is used.
+	 */
 	public Artifact(File file, String description, boolean override, String finalName) {
 		this.file = file;
 		this.description = description;
