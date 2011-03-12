@@ -25,21 +25,35 @@ public final class Contract {
 	 * This Class cannot be instantiated.
 	 */
 	private Contract() {
-
 	}
 
 	/**
-	 * Assert that the given method parameter value is not {@code null}.
+	 * Asserts that the given method parameter value is not {@code null}.
 	 *
-	 * @param param The value instance to check.
-	 * @param paramName The name of the parameter.
+	 * @param param The parameter instance to check.
+	 * @param paramName The parameter name.
 	 *
-	 * @throws IllegalArgumentException if the given parameter value is {@code null}.
+	 * @throws NullPointerException If the given parameter value is {@code null}.
 	 */
 	public static void assertNotNull(Object param, String paramName) {
 		if ( param == null ) {
-			throw new IllegalArgumentException( "Parameter " + paramName + " cannot be null." );
+			throw new NullPointerException( "Parameter " + paramName + " cannot be null." );
 		}
 	}
 
+	/**
+	 * Asserts that the given method parameter value starts with the given
+	 * keyword.
+	 *
+	 * @param param The parameter instance to check.
+	 * @param keyword The keyword.
+	 * @param paramName The parameter name.
+	 *
+	 * @throws IllegalArgumentException If the given parameter value doesn't starts with the given keyword.
+	 */
+	public static void assertStartsWith(String param, String keyword, String paramName) {
+		if ( !param.startsWith( keyword ) ) {
+			throw new IllegalArgumentException( "Parameter " + paramName + " doesn't starts with " + keyword + "." );
+		}
+	}
 }
