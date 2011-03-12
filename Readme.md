@@ -2,7 +2,7 @@ Maven Github Plugin
 ===================
 
 - **Current version** : _1.0-SNAPSHOT_
-- **Deployment date** : _2/15/2011_
+- **Deployment date** : _03/12/2011_
 
 
 __This Maven plugin is under development do not use it inside production project.__
@@ -47,7 +47,7 @@ Without any artifact configuration (see _Specify artifacts to upload_) the plugi
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
 		<token>YOUR_GITHUB_TOKEN</token>
-		<repository>YOUR_GITHUB_REPOSITORY</repository>
+		<repository>YOUR_GITHUB_REPOSITORY_URL</repository> (like https://github.com/kevinpollet/maven-github-plugin)
 		<excludes>
 			<exclude>*.zip</exclude>
 		</excludes>
@@ -62,7 +62,7 @@ To specify artifacts which have to be uploaded to the repository download sectio
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
 		<token>YOUR_GITHUB_TOKEN</token>
-		<repository>YOUR_GITHUB_REPOSITORY</repository>
+		<repository>YOUR_GITHUB_REPOSITORY_URL</repository> (like https://github.com/kevinpollet/maven-github-plugin)
 		<artifacts>
 			<artifact>
 				<file>ABSOLUTE_ARTIFACT_PATH</file>
@@ -85,7 +85,7 @@ This aim of this goal is just to list the available github repository downloads.
 		<configuration>
 			<login>YOUR_GITHUB_LOGIN</login>
 			<token>YOUR_GITHUB_TOKEN</token>
-			<repository>YOUR_GITHUB_REPOSITORY</repository>
+			<repository>YOUR_GITHUB_REPOSITORY_URL</repository> (like https://github.com/kevinpollet/maven-github-plugin)
 		</configuration>
 	</plugin>
 

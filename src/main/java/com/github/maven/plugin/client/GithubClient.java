@@ -40,14 +40,17 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import static com.github.maven.plugin.util.Contract.assertNotNull;
+import static com.github.maven.plugin.util.Contract.assertStartsWith;
+
 /**
  * @author Kevin Pollet
  */
 public class GithubClient {
 
-	private final static String GITHUB_S3_URL = "https://github.s3.amazonaws.com/";
+	private final static String GITHUB_REPOSITORY_URL_PREFIX = "https://github.com";
 
-	private final static String GITHUB_DOWNLOADS_URL_FORMAT = "https://github.com/%s/%s/downloads";
+	private final static String GITHUB_S3_URL = "https://github.s3.amazonaws.com/";
 
 	private final HttpClient httpClient;
 
@@ -55,23 +58,46 @@ public class GithubClient {
 
 	private final String token;
 
+	/**
+	 * Constructs a github client for the given
+	 * login and token.
+	 *
+	 * @param login The login.
+	 * @param token The github token associated to the given login.
+	 */
 	public GithubClient(String login, String token) {
 		this.login = login;
 		this.token = token;
 		this.httpClient = new HttpClient();
 	}
 
-	public Set<String> listDownloads(String repository) {
-		return getDownloadsInfos( repository ).keySet();
+	/**
+	 * Returns the available downloads list for the given repository.
+	 *
+	 * @param repositoryUrl The repository url.
+	 *
+	 * @return A Set containing the available downloads.
+	 */
+	public Set<String> listDownloads(String repositoryUrl) {
+		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
+
+		return retrieveDownloadsInfos( repositoryUrl ).keySet();
 	}
 
-	public void upload(File file, String description, String repository) {
-		Contract.assertNotNull( repository, "repository" );
-		Contract.assertNotNull( file, "file" );
+	/**
+	 * Uploads the given file in the download section of the given
+	 * repository url.
+	 *
+	 * @param file The file to upload.
+	 * @param description The description of the file to upload.
+	 * @param repositoryUrl The repository url.
+	 */
+	public void upload(File file, String description, String repositoryUrl) {
+		assertNotNull( file, "file" );
+		assertNotNull( repositoryUrl, "repositoryUrl" );
+		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
 
-		final String downloadsUrl = String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
-
-		PostMethod githubPost = new PostMethod( downloadsUrl );
+		PostMethod githubPost = new PostMethod( toRepositoryDownloadUrl( repositoryUrl ) );
 		githubPost.setRequestBody(
 				new NameValuePair[] {
 						new NameValuePair( "login", login ),
@@ -110,15 +136,15 @@ public class GithubClient {
 
 				int s3Response = httpClient.executeMethod( s3Post );
 				if ( s3Response != HttpStatus.SC_CREATED ) {
-					throw new GithubException( "Cannot upload " + file.getName() + " to repository " + repository );
+					throw new GithubException( "Cannot upload " + file.getName() + " to repository " + repositoryUrl );
 				}
 
 			}
 			else if ( response == HttpStatus.SC_NOT_FOUND ) {
-				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repository );
+				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
 			}
 			else if ( response == HttpStatus.SC_UNPROCESSABLE_ENTITY ) {
-				throw new GithubArtifactAlreadyExistException( "File " + file.getName() + "already exist in " + repository + " repository" );
+				throw new GithubArtifactAlreadyExistException( "File " + file.getName() + "already exist in " + repositoryUrl + " repository" );
 			}
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
@@ -127,31 +153,49 @@ public class GithubClient {
 		catch ( IOException e ) {
 			throw new GithubException( e );
 		}
-
 	}
 
-	public void replace(String downloadName, File file, String description, String repository) {
-		Contract.assertNotNull( downloadName, "downloadName" );
-		Contract.assertNotNull( file, "file" );
-		Contract.assertNotNull( description, "description" );
-		Contract.assertNotNull( repository, "repository" );
+	/**
+	 * Replaces the given download by the given file in the given repository url.
+	 *
+	 * @param downloadName The name of the artifact to replace.
+	 * @param file The file to upload.
+	 * @param description The file description
+	 * @param repositoryUrl The repository url.
+	 */
+	public void replace(String downloadName, File file, String description, String repositoryUrl) {
+		assertNotNull( downloadName, "downloadName" );
+		assertNotNull( file, "file" );
+		assertNotNull( repositoryUrl, "repositoryUrl" );
+		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
 
-		delete( repository, downloadName );
-		upload( file, description, repository );
+		try {
+			delete( repositoryUrl, downloadName );
+		}
+		catch ( GithubArtifactNotFoundException ex ) {
+			//nothing to do, replacing a missing file is valid
+		}
+
+		upload( file, description, repositoryUrl );
 	}
 
-	private void delete(String repository, String downloadName) {
-		Contract.assertNotNull( repository, "repository" );
-		Contract.assertNotNull( downloadName, "downloadName" );
-
-		final Map<String, Integer> downloads = getDownloadsInfos( repository );
-		final String downloadUrl = String.format(
-				GITHUB_DOWNLOADS_URL_FORMAT + "/%d", login, repository, downloads.get( downloadName )
-		);
+	/**
+	 * Removes the given download from the repository download section.
+	 *
+	 * @param repositoryUrl The repository url.
+	 *
+	 * @param downloadName The download name.
+	 */
+	private void delete(String repositoryUrl, String downloadName) {
+		final Map<String, Integer> downloads = retrieveDownloadsInfos( repositoryUrl );
 
 		if ( !downloads.containsKey( downloadName ) ) {
-			throw new GithubArtifactNotFoundException( "The download " + downloadName + " cannot be found in " + repository );
+			throw new GithubArtifactNotFoundException( "The download " + downloadName + " cannot be found in " + repositoryUrl );
 		}
+
+		final String downloadUrl = String.format(
+				"%s/%d", toRepositoryDownloadUrl( repositoryUrl ), downloads.get( downloadName )
+		);
 
 		PostMethod githubDelete = new PostMethod( downloadUrl );
 		githubDelete.setRequestBody(
@@ -173,15 +217,20 @@ public class GithubClient {
 		catch ( IOException e ) {
 			throw new GithubException( e );
 		}
-
 	}
 
-	private Map<String, Integer> getDownloadsInfos(String repository) {
-		Map<String, Integer> downloads = new HashMap<String, Integer>();
+	/**
+	 * Retrieves the download informations associated to the given repository
+	 * url.
+	 *
+	 * @param repositoryUrl The repository url.
+	 *
+	 * @return A map containing the downloads informations.
+	 */
+	private Map<String, Integer> retrieveDownloadsInfos(String repositoryUrl) {
+		final Map<String, Integer> downloads = new HashMap<String, Integer>();
 
-		final String downloadsUrl = String.format( GITHUB_DOWNLOADS_URL_FORMAT, login, repository );
-
-		GetMethod githubGet = new GetMethod( downloadsUrl );
+		GetMethod githubGet = new GetMethod( toRepositoryDownloadUrl( repositoryUrl ) );
 		githubGet.setQueryString(
 				new NameValuePair[] {
 						new NameValuePair( "login", login ),
@@ -197,7 +246,7 @@ public class GithubClient {
 		}
 		catch ( IOException e ) {
 			throw new GithubRepositoryNotFoundException(
-					"Cannot retrieve github repository " + repository + " informations", e
+					"Cannot retrieve github repository " + repositoryUrl + " informations", e
 			);
 		}
 
@@ -212,43 +261,67 @@ public class GithubClient {
 			}
 			catch ( IOException e ) {
 				throw new GithubRepositoryNotFoundException(
-						"Cannot retrieve github repository " + repository + " informations", e
+						"Cannot retrieve github repository " + repositoryUrl + " informations", e
 				);
 			}
 
 			Pattern pattern = Pattern.compile(
 					String.format(
-							"<a href=\"(/downloads)?/%s/%s/([^\"]+)\"", login, repository
+							"<a href=\"(/downloads)?%s/?([^\"]+)\"", removeGithubUrlPart( repositoryUrl )
 					)
 			);
 
 			Matcher matcher = pattern.matcher( githubResponse );
-
 			while ( matcher.find() ) {
 				String tmp = matcher.group( 2 );
 
 				if ( tmp.contains( "downloads" ) ) {
 					String id = matcher.group( 2 ).substring( tmp.lastIndexOf( '/' ) + 1, tmp.length() );
 					Integer downloadId = Integer.parseInt( id );
-
 					if ( matcher.find() ) {
 						downloads.put( matcher.group( 2 ), downloadId );
 					}
-
 				}
-
 			}
 
 		}
 		else if ( response == HttpStatus.SC_NOT_FOUND ) {
-			throw new GithubRepositoryNotFoundException( "Cannot found repository " + repository );
+			throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
 		}
 		else {
-			throw new GithubRepositoryNotFoundException( "Cannot retrieve github repository " + repository + " informations" );
+			throw new GithubRepositoryNotFoundException( "Cannot retrieve github repository " + repositoryUrl + " informations" );
 		}
 
 		return downloads;
-
 	}
 
+	/**
+	 * Returns the repositoryUrl download url for the given repositoryUrl
+	 * url.
+	 *
+	 * @param repositoryUrl The repository url.
+	 *
+	 * @return The download url for the given repositoryUrl url.
+	 *
+	 * @throws NullPointerException If the parameter repositoryUrl is {@code null}.
+	 */
+	private String toRepositoryDownloadUrl(String repositoryUrl) {
+		return repositoryUrl.concat( repositoryUrl.endsWith( "/" ) ? "downloads" : "/downloads" );
+	}
+
+	/**
+	 * Removes the github url part from the given repository url.
+	 *
+	 * @param repositoryUrl The repository url.
+	 *
+	 * @return The repoditory url without the github part or {@code null} if it's not a valid github repository url.
+	 */
+	private String removeGithubUrlPart(String repositoryUrl) {
+		Pattern pattern = Pattern.compile( Pattern.quote( GITHUB_REPOSITORY_URL_PREFIX ) + "(.*)?" );
+		Matcher matcher = pattern.matcher( repositoryUrl );
+		if ( matcher.find() ) {
+			return matcher.group( 1 );
+		}
+		return null;
+	}
 }
