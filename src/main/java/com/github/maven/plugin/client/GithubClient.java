@@ -136,7 +136,13 @@ public class GithubClient {
 		Contract.assertNotNull( description, "description" );
 		Contract.assertNotNull( repository, "repository" );
 
-		delete( repository, downloadName );
+		try {
+			delete( repository, downloadName );
+		}
+		catch ( GithubArtifactNotFoundException ex ) {
+			//nothing to do, replacing a missing file is valid
+		}
+
 		upload( file, description, repository );
 	}
 
