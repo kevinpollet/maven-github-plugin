@@ -35,7 +35,7 @@ After that you have to configure the goals of the maven plugin. If you're not fa
 
 ### maven-github-plugin available goals
 
-#### maven-github-plugin:upload
+#### maven-github-plugin:upload (bound to deploy phase)
 
 - Default configuration
 
@@ -50,8 +50,6 @@ Without any artifact configuration (see _Specify artifacts to upload_) the plugi
 		</excludes>
 	</configuration>
 	
-_by default this goal is bounded to the deploy phase_
-
 - Specify artifacts to upload
 
 To specify artifacts which have to be uploaded to the repository download section just add the following lines.
@@ -69,8 +67,6 @@ To specify artifacts which have to be uploaded to the repository download sectio
 			</artifact>
 		</artifacts>
 	</configuration>
-
-_by default this goal is not bounded to a lifecycle phase_
 
 #### maven-github-plugin:list
 
