@@ -102,7 +102,7 @@ public class GithubClient {
 				new NameValuePair[] {
 						new NameValuePair( "login", login ),
 						new NameValuePair( "token", token ),
-						new NameValuePair( "file_name", file.getName() ),
+						new NameValuePair( "file_name", fileName ),
 						new NameValuePair( "file_size", String.valueOf( file.length() ) ),
 						new NameValuePair( "description", description == null ? "" : description )
 				}
@@ -144,7 +144,7 @@ public class GithubClient {
 				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
 			}
 			else if ( response == HttpStatus.SC_UNPROCESSABLE_ENTITY ) {
-				throw new GithubArtifactAlreadyExistException( "File " + file.getName() + "already exist in " + repositoryUrl + " repository" );
+				throw new GithubArtifactAlreadyExistException( "File " + fileName + "already exist in " + repositoryUrl + " repository" );
 			}
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
