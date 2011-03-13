@@ -82,7 +82,7 @@ public class Artifact {
 	}
 
 	public String getName() {
-		if ( finalName == null ) {
+		if ( finalName == null || finalName.length() == 0 ) {
 			return file.getName();
 		}
 		return finalName;
