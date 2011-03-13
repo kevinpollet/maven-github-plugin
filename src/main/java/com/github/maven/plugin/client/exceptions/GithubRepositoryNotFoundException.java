@@ -31,5 +31,4 @@ public class GithubRepositoryNotFoundException extends RuntimeException {
 	public GithubRepositoryNotFoundException(Throwable cause) {
 		super( cause );
 	}
-
 }

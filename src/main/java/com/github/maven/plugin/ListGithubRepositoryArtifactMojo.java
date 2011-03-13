@@ -35,9 +35,7 @@ import org.apache.maven.plugin.logging.Log;
  * @author Kevin Pollet
  */
 public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
-	/**
-	 * {@inheritDoc}
-	 */
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final Log logger = getLog();
 		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
@@ -66,7 +64,5 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 		catch ( GithubException e ) {
 			throw new MojoExecutionException( e.getMessage(), e );
 		}
-
 	}
-
 }

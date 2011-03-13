@@ -54,9 +54,6 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 */
 	private boolean overrideExistingFile;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final MavenProject project = getProject();
 

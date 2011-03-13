@@ -31,5 +31,4 @@ public class GithubException extends RuntimeException {
 	public GithubException(Throwable cause) {
 		super( cause );
 	}
-
 }

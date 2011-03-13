@@ -31,5 +31,4 @@ public class GithubArtifactAlreadyExistException extends RuntimeException {
 	public GithubArtifactAlreadyExistException(Throwable cause) {
 		super( cause );
 	}
-
 }

@@ -90,5 +90,4 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 
 		return null;
 	}
-
 }
