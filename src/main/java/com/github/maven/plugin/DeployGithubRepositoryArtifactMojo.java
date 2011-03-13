@@ -50,7 +50,7 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	private Artifact[] artifacts;
 
 	/**
-	 * @parameter expression="${github.upload.overrideExistingArtifact}" default-value=false
+	 * @parameter default-value=false
 	 */
 	private boolean overrideExistingFile;
 
