@@ -59,19 +59,12 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 */
 	private Artifact[] artifacts;
 
-	/**
-	 * If true, artifacts will be overridden even if they exist
-	 * in the repository download section.
-	 *
-	 * @parameter default-value="false"
-	 */
-	private boolean overrideExistingFile;
-
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
 
 			//if no artifacts are configured, upload main artifact and attached artifacts
 			if ( artifacts == null ) {
+				final String projectDescription = mavenProject.getDescription();
 				final Set<Artifact> githubArtifacts = new HashSet<Artifact>();
 
 				final DirectoryScanner scanner = new DirectoryScanner();
@@ -86,8 +79,8 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 					githubArtifacts.add(
 							new Artifact(
 									mavenProject.getArtifact().getFile(),
-									mavenProject.getDescription(),
-									overrideExistingFile
+									projectDescription,
+									mavenProject.getArtifact().isSnapshot()
 							)
 					);
 				}
@@ -97,7 +90,9 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 					if ( includedFiles.contains( attachedArtifact.getFile().getName() ) ) {
 						githubArtifacts.add(
 								new Artifact(
-										attachedArtifact.getFile(), mavenProject.getDescription(), overrideExistingFile
+										attachedArtifact.getFile(),
+										projectDescription,
+										attachedArtifact.isSnapshot()
 								)
 						);
 					}
