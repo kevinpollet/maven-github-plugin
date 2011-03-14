@@ -71,27 +71,12 @@ public class GithubClientImpl implements GithubClient {
 		this.httpClient = new HttpClient();
 	}
 
-	/**
-	 * Returns the available downloads list for the given repository.
-	 *
-	 * @param repositoryUrl The repository url.
-	 *
-	 * @return A Set containing the available downloads.
-	 */
 	public Set<String> listDownloads(String repositoryUrl) {
 		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
 
 		return retrieveDownloadsInfos( repositoryUrl ).keySet();
 	}
 
-	/**
-	 * Uploads the given file in the download section of the given
-	 * repository url.
-	 *
-	 * @param file The file to upload.
-	 * @param description The description of the file to upload.
-	 * @param repositoryUrl The repository url.
-	 */
 	public void upload(String fileName, File file, String description, String repositoryUrl) {
 		assertNotNull( file, "file" );
 		assertNotNull( repositoryUrl, "repositoryUrl" );
@@ -158,14 +143,6 @@ public class GithubClientImpl implements GithubClient {
 		githubPost.releaseConnection();
 	}
 
-	/**
-	 * Replaces the given download by the given file in the given repository url.
-	 *
-	 * @param downloadName The name of the artifact to replace.
-	 * @param file The file to upload.
-	 * @param description The file description
-	 * @param repositoryUrl The repository url.
-	 */
 	public void replace(String downloadName, File file, String description, String repositoryUrl) {
 		assertNotNull( downloadName, "downloadName" );
 		assertNotNull( file, "file" );
