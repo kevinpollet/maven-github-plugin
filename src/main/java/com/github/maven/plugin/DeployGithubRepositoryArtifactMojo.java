@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.maven.plugin.client.GithubClient;
+import com.github.maven.plugin.client.impl.GithubClientImpl;
 import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
 import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
 import com.github.maven.plugin.client.exceptions.GithubException;
@@ -122,7 +123,7 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 */
 	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
 		final Log log = getLog();
-		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
+		final GithubClient githubClient = new GithubClientImpl( getLogin(), getToken() );
 
 		log.info( "" );
 		for ( Artifact artifact : artifacts ) {

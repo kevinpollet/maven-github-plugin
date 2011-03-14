@@ -18,6 +18,7 @@ package com.github.maven.plugin;
 import java.util.Set;
 
 import com.github.maven.plugin.client.GithubClient;
+import com.github.maven.plugin.client.impl.GithubClientImpl;
 import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -39,7 +40,7 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final Log logger = getLog();
-		final GithubClient githubClient = new GithubClient( getLogin(), getToken() );
+		final GithubClient githubClient = new GithubClientImpl( getLogin(), getToken() );
 
 		try {
 
