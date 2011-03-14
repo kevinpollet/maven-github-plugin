@@ -138,6 +138,7 @@ public class GithubClient {
 					throw new GithubException( "Cannot upload " + file.getName() + " to repository " + repositoryUrl );
 				}
 
+				s3Post.releaseConnection();
 			}
 			else if ( response == HttpStatus.SC_NOT_FOUND ) {
 				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
@@ -148,6 +149,8 @@ public class GithubClient {
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
 			}
+
+			githubPost.releaseConnection();
 		}
 		catch ( IOException e ) {
 			throw new GithubException( e );
@@ -204,16 +207,16 @@ public class GithubClient {
 		);
 
 		try {
-
 			int response = httpClient.executeMethod( githubDelete );
 			if ( response != HttpStatus.SC_MOVED_TEMPORARILY ) {
 				throw new GithubException( "Unexpected error" + HttpStatus.getStatusText( response ) );
 			}
-
 		}
 		catch ( IOException e ) {
 			throw new GithubException( e );
 		}
+
+		githubDelete.releaseConnection();
 	}
 
 	/**
@@ -246,7 +249,6 @@ public class GithubClient {
 					"Cannot retrieve github repository " + repositoryUrl + " informations", e
 			);
 		}
-
 
 		if ( response == HttpStatus.SC_OK ) {
 
@@ -288,6 +290,8 @@ public class GithubClient {
 		else {
 			throw new GithubRepositoryNotFoundException( "Cannot retrieve github repository " + repositoryUrl + " informations" );
 		}
+
+		githubGet.releaseConnection();
 
 		return downloads;
 	}

@@ -15,7 +15,10 @@
  */
 package com.github.maven.plugin;
 
-import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import com.github.maven.plugin.client.GithubClient;
 import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
@@ -31,12 +34,12 @@ import org.codehaus.plexus.util.DirectoryScanner;
 /**
  * Upload distribution artifacts into the download section of the configured github project.
  *
+ * @author Kevin Pollet
+ *
  * @goal upload
  * @phase deploy
  * @threadSafe
  * @requiresOnline true
- *
- * @author Kevin Pollet
  */
 public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	/**
@@ -55,41 +58,41 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	private boolean overrideExistingFile;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		final MavenProject project = getProject();
-
 		try {
 
-			//if no artifacts are configured deploy artifacts matching ${project.artifactId}-${project.version}*
+			//if no artifacts are configured, upload main artifact and attached artifacts
 			if ( artifacts == null ) {
-				final String outputDir = project.getBuild().getDirectory();
-				final String defaultArtifactStartName = project.getArtifactId() + "-" + project.getVersion();
-				final String[] includes = {
-						defaultArtifactStartName + "*.zip",
-						defaultArtifactStartName + "*.tar.gz",
-						defaultArtifactStartName + "*.tar.bz2",
-						defaultArtifactStartName + "*.jar"
-				};
+				final MavenProject project = getProject();
+				final Set<Artifact> githubArtifacts = new HashSet<Artifact>();
 
 				final DirectoryScanner scanner = new DirectoryScanner();
-				scanner.setBasedir( outputDir );
-				scanner.setCaseSensitive( true );
-				scanner.setIncludes( includes );
 				scanner.setExcludes( excludes );
+				scanner.setBasedir( project.getBuild().getDirectory() );
 				scanner.scan();
 
-				final String[] files = scanner.getIncludedFiles();
-				if ( files.length == 0 ) {
-					throw new MojoFailureException( "No artifacts to upload into repository " + getRepository() );
+				final List<String> includedFiles = Arrays.asList( scanner.getIncludedFiles() );
+
+				//add main artifact
+				if ( includedFiles.contains( project.getArtifact().getFile().getName() ) ) {
+					githubArtifacts.add(
+							new Artifact(
+									project.getArtifact().getFile(), project.getDescription(), overrideExistingFile
+							)
+					);
 				}
-				else {
-					artifacts = new Artifact[files.length];
-					for ( int i = 0; i < files.length; i++ ) {
-						Artifact artifact = new Artifact(
-								new File( outputDir, files[i] ), project.getDescription(), overrideExistingFile
+
+				//add attached artifacts
+				for ( org.apache.maven.artifact.Artifact attachedArtifact : project.getAttachedArtifacts() ) {
+					if ( includedFiles.contains( attachedArtifact.getFile().getName() ) ) {
+						githubArtifacts.add(
+								new Artifact(
+										attachedArtifact.getFile(), project.getDescription(), overrideExistingFile
+								)
 						);
-						artifacts[i] = artifact;
 					}
 				}
+
+				artifacts = githubArtifacts.toArray( new Artifact[0] );
 			}
 
 			//upload artifacts to configured github repository
