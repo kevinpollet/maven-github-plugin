@@ -27,6 +27,12 @@
 
     <name>Maven Github plugin</name>
 
+    <description>
+        This plugin allows uploading artifacts to the download section of a github repository. One utilisation of this
+        plugin might be to upload distribution artifacts during the build/release process (these artifacts generally
+        provide a functional application out of the box).
+    </description>
+
     <licenses>
         <license>
             <name>Apache Licence, Version 2.0</name>
@@ -39,6 +45,11 @@
         <connection>scm:git:git://github.com/kevinpollet/maven-github-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:kevinpollet/maven-github-plugin.git</developerConnection>
     </scm>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/kevinpollet/maven-github-plugin/issues</url>
+    </issueManagement>
 
     <distributionManagement>
         <repository>
