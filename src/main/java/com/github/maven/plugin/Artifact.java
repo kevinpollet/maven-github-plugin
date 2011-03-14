@@ -50,6 +50,7 @@ public class Artifact {
 	 * for instantiation to allow field injection.
 	 */
 	public Artifact() {
+		this( null, null, false );
 	}
 
 	/**
