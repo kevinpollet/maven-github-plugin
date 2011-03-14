@@ -37,7 +37,7 @@ import org.apache.maven.plugin.logging.Log;
  * @requiresOnline true
  * @since 1.0
  */
-public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
+public final class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final Log logger = getLog();

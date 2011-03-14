@@ -43,7 +43,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * @requiresOnline true
  * @since 1.0
  */
-public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
+public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	/**
 	 * @parameter expression="${github.upload.skip}" default-value="false"
 	 */
