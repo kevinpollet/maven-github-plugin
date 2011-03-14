@@ -21,15 +21,14 @@ import java.util.List;
 import java.util.Set;
 
 import com.github.maven.plugin.client.GithubClient;
-import com.github.maven.plugin.client.impl.GithubClientImpl;
 import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
 import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
 import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
+import com.github.maven.plugin.client.impl.GithubClientImpl;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
