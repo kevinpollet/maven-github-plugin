@@ -39,7 +39,7 @@ After that you have to configure the goals of the maven plugin. If you're not fa
 
 - Default configuration
 
-Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads all artifacts in the build directory (by default `target`) who match the following expression `${project.artifactId}-${project.version}*.(jar|zip|tar.gz|tar.bz2)`. If you want to exclude files just add the following configuration in your pom.
+Without any artifact configuration (see _Specify artifacts to upload_) the plugin uploads the main and the attached artifacts of the project. If you want to exclude files just add the following configuration in your pom.
 
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
