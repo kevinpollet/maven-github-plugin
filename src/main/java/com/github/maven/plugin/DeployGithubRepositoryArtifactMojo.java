@@ -63,7 +63,7 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 * If true, artifacts will be overridden even if they exist
 	 * in the repository download section.
 	 *
-	 * @parameter default-value=false
+	 * @parameter default-value="false"
 	 */
 	private boolean overrideExistingFile;
 
