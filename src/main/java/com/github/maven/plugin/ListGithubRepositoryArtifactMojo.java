@@ -45,7 +45,7 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 		try {
 
-			final Set<String> artifacts = githubClient.listDownloads( repository );
+			final Set<String> artifacts = githubClient.listAvailableDownloads( repository );
 
 			logger.info( "" );
 			if ( artifacts.isEmpty() ) {

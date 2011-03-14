@@ -29,25 +29,26 @@ public interface GithubClient {
 	 *
 	 * @return A Set containing the available downloads.
 	 */
-	Set<String> listDownloads(String repositoryUrl);
+	Set<String> listAvailableDownloads(String repositoryUrl);
 
 	/**
 	 * Uploads the given file in the download section of the given
 	 * repository url.
 	 *
+	 * @param artifactName The name of the artifact to upload.
 	 * @param file The file to upload.
 	 * @param description The description of the file to upload.
 	 * @param repositoryUrl The repository url.
 	 */
-	void upload(String fileName, File file, String description, String repositoryUrl);
+	void upload(String artifactName, File file, String description, String repositoryUrl);
 
 	/**
 	 * Replaces the given download by the given file in the given repository url.
 	 *
-	 * @param downloadName The name of the artifact to replace.
+	 * @param artifactName The name of the artifact to replace.
 	 * @param file The file to upload.
 	 * @param description The file description
 	 * @param repositoryUrl The repository url.
 	 */
-	void replace(String downloadName, File file, String description, String repositoryUrl);
+	void replace(String artifactName, File file, String description, String repositoryUrl);
 }

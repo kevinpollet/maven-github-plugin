@@ -71,13 +71,13 @@ public class GithubClientImpl implements GithubClient {
 		this.httpClient = new HttpClient();
 	}
 
-	public Set<String> listDownloads(String repositoryUrl) {
+	public Set<String> listAvailableDownloads(String repositoryUrl) {
 		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
-
 		return retrieveDownloadsInfos( repositoryUrl ).keySet();
 	}
 
-	public void upload(String fileName, File file, String description, String repositoryUrl) {
+	public void upload(String artifactName, File file, String description, String repositoryUrl) {
+		assertNotNull( artifactName, "artifactName" );
 		assertNotNull( file, "file" );
 		assertNotNull( repositoryUrl, "repositoryUrl" );
 		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
@@ -87,7 +87,7 @@ public class GithubClientImpl implements GithubClient {
 				new NameValuePair[] {
 						new NameValuePair( "login", login ),
 						new NameValuePair( "token", token ),
-						new NameValuePair( "file_name", fileName ),
+						new NameValuePair( "file_name", artifactName ),
 						new NameValuePair( "file_size", String.valueOf( file.length() ) ),
 						new NameValuePair( "description", description == null ? "" : description )
 				}
@@ -105,7 +105,7 @@ public class GithubClientImpl implements GithubClient {
 				PostMethod s3Post = new PostMethod( GITHUB_S3_URL );
 
 				Part[] parts = {
-						new StringPart( "Filename", fileName ),
+						new StringPart( "Filename", artifactName ),
 						new StringPart( "policy", node.path( "policy" ).getTextValue() ),
 						new StringPart( "success_action_status", "201" ),
 						new StringPart( "key", node.path( "path" ).getTextValue() ),
@@ -130,7 +130,7 @@ public class GithubClientImpl implements GithubClient {
 				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
 			}
 			else if ( response == HttpStatus.SC_UNPROCESSABLE_ENTITY ) {
-				throw new GithubArtifactAlreadyExistException( "File " + fileName + "already exist in " + repositoryUrl + " repository" );
+				throw new GithubArtifactAlreadyExistException( "File " + artifactName + "already exist in " + repositoryUrl + " repository" );
 			}
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
@@ -143,36 +143,36 @@ public class GithubClientImpl implements GithubClient {
 		githubPost.releaseConnection();
 	}
 
-	public void replace(String downloadName, File file, String description, String repositoryUrl) {
-		assertNotNull( downloadName, "downloadName" );
+	public void replace(String artifactName, File file, String description, String repositoryUrl) {
+		assertNotNull( artifactName, "artifactName" );
 		assertNotNull( file, "file" );
 		assertNotNull( repositoryUrl, "repositoryUrl" );
 		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
 
 		try {
-			delete( repositoryUrl, downloadName );
+			delete( repositoryUrl, artifactName );
 		}
 		catch ( GithubArtifactNotFoundException ex ) {
 			// replace should not fail if file was not found on server.
 		}
-		upload( downloadName, file, description, repositoryUrl );
+		upload( artifactName, file, description, repositoryUrl );
 	}
 
 	/**
 	 * Removes the given download from the repository download section.
 	 *
 	 * @param repositoryUrl The repository url.
-	 * @param downloadName The download name.
+	 * @param artifactName The download name.
 	 */
-	private void delete(String repositoryUrl, String downloadName) {
+	private void delete(String repositoryUrl, String artifactName) {
 		final Map<String, Integer> downloads = retrieveDownloadsInfos( repositoryUrl );
 
-		if ( !downloads.containsKey( downloadName ) ) {
-			throw new GithubArtifactNotFoundException( "The download " + downloadName + " cannot be found in " + repositoryUrl );
+		if ( !downloads.containsKey( artifactName ) ) {
+			throw new GithubArtifactNotFoundException( "The download " + artifactName + " cannot be found in " + repositoryUrl );
 		}
 
 		final String downloadUrl = String.format(
-				"%s/%d", toRepositoryDownloadUrl( repositoryUrl ), downloads.get( downloadName )
+				"%s/%d", toRepositoryDownloadUrl( repositoryUrl ), downloads.get( artifactName )
 		);
 
 		PostMethod githubDelete = new PostMethod( downloadUrl );
