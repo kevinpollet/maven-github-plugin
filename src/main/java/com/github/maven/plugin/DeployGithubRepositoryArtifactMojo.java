@@ -45,6 +45,11 @@ import org.codehaus.plexus.util.DirectoryScanner;
  */
 public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	/**
+	 * @parameter expression="${github.upload.skip}" default-value="false"
+	 */
+	private boolean skipUpload;
+
+	/**
 	 * Allows to disable the upload of artifacts which match at least one
 	 * pattern of the given list.
 	 *
@@ -60,62 +65,64 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	private Artifact[] artifacts;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		try {
+		if ( !skipUpload ) {
+			try {
 
-			//if no artifacts are configured, upload main artifact and attached artifacts
-			if ( artifacts == null ) {
-				final String projectDescription = mavenProject.getDescription();
-				final Set<Artifact> githubArtifacts = new HashSet<Artifact>();
+				//if no artifacts are configured, upload main artifact and attached artifacts
+				if ( artifacts == null ) {
+					final String projectDescription = mavenProject.getDescription();
+					final Set<Artifact> githubArtifacts = new HashSet<Artifact>();
 
-				final DirectoryScanner scanner = new DirectoryScanner();
-				scanner.setExcludes( excludes );
-				scanner.setBasedir( mavenProject.getBuild().getDirectory() );
-				scanner.scan();
+					final DirectoryScanner scanner = new DirectoryScanner();
+					scanner.setExcludes( excludes );
+					scanner.setBasedir( mavenProject.getBuild().getDirectory() );
+					scanner.scan();
 
-				final List<String> includedFiles = Arrays.asList( scanner.getIncludedFiles() );
+					final List<String> includedFiles = Arrays.asList( scanner.getIncludedFiles() );
 
-				//add main artifact
-				if ( includedFiles.contains( mavenProject.getArtifact().getFile().getName() ) ) {
-					githubArtifacts.add(
-							new Artifact(
-									mavenProject.getArtifact().getFile(),
-									projectDescription,
-									mavenProject.getArtifact().isSnapshot()
-							)
-					);
-				}
-
-				//add attached artifacts
-				for ( org.apache.maven.artifact.Artifact attachedArtifact : mavenProject.getAttachedArtifacts() ) {
-					if ( includedFiles.contains( attachedArtifact.getFile().getName() ) ) {
+					//add main artifact
+					if ( includedFiles.contains( mavenProject.getArtifact().getFile().getName() ) ) {
 						githubArtifacts.add(
 								new Artifact(
-										attachedArtifact.getFile(),
+										mavenProject.getArtifact().getFile(),
 										projectDescription,
-										attachedArtifact.isSnapshot()
+										mavenProject.getArtifact().isSnapshot()
 								)
 						);
 					}
+
+					//add attached artifacts
+					for ( org.apache.maven.artifact.Artifact attachedArtifact : mavenProject.getAttachedArtifacts() ) {
+						if ( includedFiles.contains( attachedArtifact.getFile().getName() ) ) {
+							githubArtifacts.add(
+									new Artifact(
+											attachedArtifact.getFile(),
+											projectDescription,
+											attachedArtifact.isSnapshot()
+									)
+							);
+						}
+					}
+
+					artifacts = githubArtifacts.toArray( new Artifact[0] );
 				}
 
-				artifacts = githubArtifacts.toArray( new Artifact[0] );
+				//upload artifacts to configured github repository
+				uploadArtifacts( artifacts );
+
 			}
-
-			//upload artifacts to configured github repository
-			uploadArtifacts( artifacts );
-
-		}
-		catch ( GithubRepositoryNotFoundException e ) {
-			throw new MojoFailureException( e.getMessage(), e );
-		}
-		catch ( GithubArtifactNotFoundException e ) {
-			throw new MojoFailureException( e.getMessage(), e );
-		}
-		catch ( GithubArtifactAlreadyExistException e ) {
-			throw new MojoFailureException( e.getMessage(), e );
-		}
-		catch ( GithubException e ) {
-			throw new MojoExecutionException( "Unexpected error", e );
+			catch ( GithubRepositoryNotFoundException e ) {
+				throw new MojoFailureException( e.getMessage(), e );
+			}
+			catch ( GithubArtifactNotFoundException e ) {
+				throw new MojoFailureException( e.getMessage(), e );
+			}
+			catch ( GithubArtifactAlreadyExistException e ) {
+				throw new MojoFailureException( e.getMessage(), e );
+			}
+			catch ( GithubException e ) {
+				throw new MojoExecutionException( "Unexpected error", e );
+			}
 		}
 	}
 
