@@ -167,6 +167,7 @@
                     </headerDefinitions>
                     <excludes>
                         <exclude>.gitignore</exclude>
+                        <exclude>Readme.md</exclude>
                         <exclude>**/*.textile</exclude>
                         <exclude>**/javaLicenceHeader.xml</exclude>
                     </excludes>
