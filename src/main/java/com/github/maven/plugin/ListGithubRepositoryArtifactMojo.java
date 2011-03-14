@@ -28,11 +28,12 @@ import org.apache.maven.plugin.logging.Log;
  * This goal allows to list the current available artifacts in the configured
  * github repository.
  *
+ * @author Kevin Pollet
+ *
  * @goal list
  * @threadSafe
+ * @requiresDirectInvocation true
  * @requiresOnline true
- *
- * @author Kevin Pollet
  */
 public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
