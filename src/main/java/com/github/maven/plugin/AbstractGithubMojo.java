@@ -22,7 +22,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Proxy;
 
 /**
- * The Abstract Github Mojo class.
+ * The Abstract Github Mojo.
  *
  * @author Kevin Pollet
  */
@@ -32,48 +32,32 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 * @readonly
 	 * @required
 	 */
-	private MavenProject project;
+	protected MavenProject mavenProject;
 
 	/**
 	 * @parameter default-value="${settings.proxies}"
 	 * @readonly
 	 * @required
 	 */
-	private List<Proxy> proxies;
+	protected List<Proxy> proxies;
 
 	/**
 	 * @parameter expression="${github.login}"
 	 * @required
 	 */
-	private String login;
+	protected String login;
 
 	/**
 	 * @parameter expression="${github.token}"
 	 * @required
 	 */
-	private String token;
+	protected String token;
 
 	/**
 	 * @parameter expression="${github.repository}"
 	 * @required
 	 */
-	private String repository;
-
-	public String getLogin() {
-		return login;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public String getRepository() {
-		return repository;
-	}
-
-	public MavenProject getProject() {
-		return project;
-	}
+	protected String repository;
 
 	/**
 	 * Get the first active HTTPS proxy configured in

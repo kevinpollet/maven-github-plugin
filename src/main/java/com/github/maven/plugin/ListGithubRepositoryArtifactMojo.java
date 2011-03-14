@@ -40,18 +40,18 @@ public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		final Log logger = getLog();
-		final GithubClient githubClient = new GithubClientImpl( getLogin(), getToken() );
+		final GithubClient githubClient = new GithubClientImpl( login, token );
 
 		try {
 
-			final Set<String> artifacts = githubClient.listDownloads( getRepository() );
+			final Set<String> artifacts = githubClient.listDownloads( repository );
 
 			logger.info( "" );
 			if ( artifacts.isEmpty() ) {
-				logger.info( "No available downloads for [" + getRepository() + "]" );
+				logger.info( "No available downloads for [" + repository + "]" );
 			}
 			else {
-				logger.info( "Available downloads for [" + getRepository() + "]" );
+				logger.info( "Available downloads for [" + repository + "]" );
 				logger.info( "" );
 				for ( String download : artifacts ) {
 					getLog().info( "* " + download );

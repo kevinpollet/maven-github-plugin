@@ -150,12 +150,12 @@ public class GithubClientImpl implements GithubClient {
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
 			}
-
-			githubPost.releaseConnection();
 		}
 		catch ( IOException e ) {
 			throw new GithubException( e );
 		}
+
+		githubPost.releaseConnection();
 	}
 
 	/**

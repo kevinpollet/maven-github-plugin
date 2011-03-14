@@ -63,31 +63,32 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 			//if no artifacts are configured, upload main artifact and attached artifacts
 			if ( artifacts == null ) {
-				final MavenProject project = getProject();
 				final Set<Artifact> githubArtifacts = new HashSet<Artifact>();
 
 				final DirectoryScanner scanner = new DirectoryScanner();
 				scanner.setExcludes( excludes );
-				scanner.setBasedir( project.getBuild().getDirectory() );
+				scanner.setBasedir( mavenProject.getBuild().getDirectory() );
 				scanner.scan();
 
 				final List<String> includedFiles = Arrays.asList( scanner.getIncludedFiles() );
 
 				//add main artifact
-				if ( includedFiles.contains( project.getArtifact().getFile().getName() ) ) {
+				if ( includedFiles.contains( mavenProject.getArtifact().getFile().getName() ) ) {
 					githubArtifacts.add(
 							new Artifact(
-									project.getArtifact().getFile(), project.getDescription(), overrideExistingFile
+									mavenProject.getArtifact().getFile(),
+									mavenProject.getDescription(),
+									overrideExistingFile
 							)
 					);
 				}
 
 				//add attached artifacts
-				for ( org.apache.maven.artifact.Artifact attachedArtifact : project.getAttachedArtifacts() ) {
+				for ( org.apache.maven.artifact.Artifact attachedArtifact : mavenProject.getAttachedArtifacts() ) {
 					if ( includedFiles.contains( attachedArtifact.getFile().getName() ) ) {
 						githubArtifacts.add(
 								new Artifact(
-										attachedArtifact.getFile(), project.getDescription(), overrideExistingFile
+										attachedArtifact.getFile(), mavenProject.getDescription(), overrideExistingFile
 								)
 						);
 					}
@@ -123,7 +124,7 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	 */
 	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
 		final Log log = getLog();
-		final GithubClient githubClient = new GithubClientImpl( getLogin(), getToken() );
+		final GithubClient githubClient = new GithubClientImpl( login, token );
 
 		log.info( "" );
 		for ( Artifact artifact : artifacts ) {
@@ -134,12 +135,12 @@ public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 			log.info( "Uploading " + artifact );
 			if ( artifact.getOverride() ) {
 				githubClient.replace(
-						artifact.getName(), artifact.getFile(), artifact.getDescription(), getRepository()
+						artifact.getName(), artifact.getFile(), artifact.getDescription(), repository
 				);
 			}
 			else {
 				githubClient.upload(
-						artifact.getName(), artifact.getFile(), artifact.getDescription(), getRepository()
+						artifact.getName(), artifact.getFile(), artifact.getDescription(), repository
 				);
 			}
 		}
