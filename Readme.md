@@ -34,7 +34,7 @@ To add the _maven-github-plugin_ in your project just add the following lines:
 
 After that you have to configure the goals of the maven plugin. If you're not familiar with this step, see [Maven documentation](http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html).
 
-### Available goals
+### Available Goals
 
 ### github:upload
 
@@ -91,7 +91,22 @@ This aim of this goal is just to list the available github repository downloads.
 FAQ
 ---
 
-* __How invoke this plugin goals with prefix__ ?
+### How skip the uploading process ?
+
+>The maven-githup-plugin defines a system property `github.upload.skip` (initialized by default to `false`) which allow to disable the uploading of artifacts. This also can be achieved by adding the following configuration:
+
+    <configuration>
+		...
+		<skipUpload>true</skipUpload>
+		...
+	</configuration>
+
+### How keep your github token secret ?
+
+> A system property is associated to github **token** (and also for github **login**). You can define it in the `settings.xml` file or by specifying the property on the command line like 
+`mvn clean deploy -Dgithub.token=YOUR_GITHUB_TOKEN`.
+
+### How invoke this plugin goals with it's prefix ?
  
 >To invoke this plugin with it's prefix you have to add the following lines in your `settings.xml` file:
 
@@ -101,17 +116,14 @@ FAQ
 	
 >After that you should invoke the **list** goal with this command: `mvn github:list`
 
-* __How keep secret your github token__ ?
-
-> A system property is associated to github **token** (and also for github **login**). You can define it in the `settings.xml` file or by specifying the property on the command line like 
-`mvn clean deploy -Dgithub.token=YOUR_GITHUB_TOKEN`.
-
-* __How report a bug or request a new feature__ ?
-
->To report an issue or request a new feature you just have to open an issue in the repository issue tracker. After that you can add a label to it. Currently there is two label __Bug__ and __Feature__.
-		
 How contribute
 --------------
+
+### Reporting a Bug / Requesting a Feature
+
+To report an issue or request a new feature you just have to open an issue in the repository issue tracker (<https://github.com/kevinpollet/maven-github-plugin/issues>). After that you can add a label to it. Currently there is two label __Bug__ and __Feature__.
+
+### Contributing some code
 
 To contribute, follow this steps:
 
