@@ -32,7 +32,8 @@ import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Upload distribution artifacts into the download section of the configured github project.
+ * Uploads artifacts to the download section of
+ * the configured github repository.
  *
  * @author Kevin Pollet
  *
@@ -40,19 +41,28 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * @phase deploy
  * @threadSafe
  * @requiresOnline true
+ * @since 1.0
  */
 public class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	/**
+	 * Allows to disable the upload of artifacts which match at least one
+	 * pattern of the given list.
+	 *
 	 * @parameter
 	 */
 	private String[] excludes;
 
 	/**
+	 * Allows to configure the artifacts to upload.
+	 *
 	 * @parameter
 	 */
 	private Artifact[] artifacts;
 
 	/**
+	 * If true, artifacts will be overridden even if they exist
+	 * in the repository download section.
+	 *
 	 * @parameter default-value=false
 	 */
 	private boolean overrideExistingFile;

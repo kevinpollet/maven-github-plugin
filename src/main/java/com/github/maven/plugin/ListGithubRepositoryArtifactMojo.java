@@ -26,8 +26,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 
 /**
- * This goal allows to list the current available artifacts in the configured
- * github repository.
+ * Allows to list the current available artifacts in the download
+ * section of the configured github repository.
  *
  * @author Kevin Pollet
  *
@@ -35,6 +35,7 @@ import org.apache.maven.plugin.logging.Log;
  * @threadSafe
  * @requiresDirectInvocation true
  * @requiresOnline true
+ * @since 1.0
  */
 public class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
