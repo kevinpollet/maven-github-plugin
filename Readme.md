@@ -36,7 +36,11 @@ After that you have to configure the goals of the maven plugin. If you're not fa
 
 ### Available Goals
 
-### github:upload
+### github:help
+
+Shows the help of the plugin.
+
+### github:deploy
 
 By default this goal is bound to the __deploy__ phase.
 
