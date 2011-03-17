@@ -28,9 +28,9 @@
     <name>Maven Github plugin</name>
 
     <description>
-        This plugin allows uploading artifacts to the download section of a github repository. One utilisation of this
-        plugin might be to upload distribution artifacts during the build/release process (these artifacts generally
-        provide a functional application out of the box).
+        This plugin allows to deploy the project artifacts into the download section of the hosting github repository.
+        This plugin might be used to deploy the project distribution artifacts during the build/release process (these
+        artifacts generally provide a functional application out of the box).
     </description>
 
     <licenses>
