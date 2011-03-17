@@ -130,7 +130,7 @@ public class GithubClientImpl implements GithubClient {
 				throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
 			}
 			else if ( response == HttpStatus.SC_UNPROCESSABLE_ENTITY ) {
-				throw new GithubArtifactAlreadyExistException( "File " + artifactName + "already exist in " + repositoryUrl + " repository" );
+				throw new GithubArtifactAlreadyExistException( "File " + artifactName + " already exist in " + repositoryUrl + " repository" );
 			}
 			else {
 				throw new GithubException( "Error " + HttpStatus.getStatusText( response ) );
@@ -187,7 +187,7 @@ public class GithubClientImpl implements GithubClient {
 		try {
 			int response = httpClient.executeMethod( githubDelete );
 			if ( response != HttpStatus.SC_MOVED_TEMPORARILY ) {
-				throw new GithubException( "Unexpected error" + HttpStatus.getStatusText( response ) );
+				throw new GithubException( "Unexpected error " + HttpStatus.getStatusText( response ) );
 			}
 		}
 		catch ( IOException e ) {
@@ -238,7 +238,7 @@ public class GithubClientImpl implements GithubClient {
 			}
 			catch ( IOException e ) {
 				throw new GithubRepositoryNotFoundException(
-						"Cannot retrieve github repository " + repositoryUrl + " informations", e
+						"Cannot retrieve github repository " + repositoryUrl + "  informations", e
 				);
 			}
 
