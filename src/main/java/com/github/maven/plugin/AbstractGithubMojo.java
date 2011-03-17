@@ -35,13 +35,6 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	protected MavenProject mavenProject;
 
 	/**
-	 * @parameter default-value="${settings.proxies}"
-	 * @readonly
-	 * @required
-	 */
-	protected List<Proxy> proxies;
-
-	/**
 	 * The github login (must have write access to the github repository).
 	 *
 	 * @parameter expression="${github.login}"
@@ -64,20 +57,4 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 * @required
 	 */
 	protected String repository;
-
-	/**
-	 * Get the first active HTTPS proxy configured in
-	 * maven <em>settings.xml</em> file.
-	 *
-	 * @return The first active HTTPS proxy or {@code null}
-	 */
-	public Proxy getActiveHttpsProxy() {
-		for ( Proxy proxy : proxies ) {
-			if ( proxy.isActive() && "https".equalsIgnoreCase( proxy.getProtocol() ) ) {
-				return proxy;
-			}
-		}
-
-		return null;
-	}
 }
