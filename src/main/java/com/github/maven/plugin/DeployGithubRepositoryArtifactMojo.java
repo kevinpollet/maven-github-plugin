@@ -32,12 +32,12 @@ import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
- * Uploads artifacts to the download section of
+ * Deploys artifacts to the download section of
  * the configured github repository.
  *
  * @author Kevin Pollet
  *
- * @goal upload
+ * @goal deploy
  * @phase deploy
  * @threadSafe
  * @requiresOnline true
