@@ -29,7 +29,6 @@ import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundExcepti
 import com.github.maven.plugin.client.impl.GithubClientImpl;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
