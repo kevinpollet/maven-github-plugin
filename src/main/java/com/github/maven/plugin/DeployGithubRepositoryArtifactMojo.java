@@ -50,6 +50,11 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 	private boolean skipUpload;
 
 	/**
+	 * @parameter expression="${dryRun}" default-value="false"
+	 */
+	private boolean dryRun;
+
+	/**
 	 * Allows to disable the upload of artifacts which match at least one
 	 * pattern of the given list.
 	 *
@@ -149,13 +154,15 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 				);
 			}
 
-			//upload or replace the artifact
 			getLog().info( "Uploading " + artifact );
-			if ( artifact.getOverride() ) {
-				githubClient.replace( artifactName, artifactFile, artifactDescription, repository );
-			}
-			else {
-				githubClient.upload( artifactName, artifactFile, artifactDescription, repository );
+			if ( !dryRun ) {
+				//upload or replace the artifact
+				if ( artifact.getOverride() ) {
+					githubClient.replace( artifactName, artifactFile, artifactDescription, repository );
+				}
+				else {
+					githubClient.upload( artifactName, artifactFile, artifactDescription, repository );
+				}
 			}
 		}
 		getLog().info( "" );
