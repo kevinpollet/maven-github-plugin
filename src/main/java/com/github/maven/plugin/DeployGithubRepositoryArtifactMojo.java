@@ -45,11 +45,18 @@ import org.codehaus.plexus.util.DirectoryScanner;
  */
 public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 	/**
+	 * If true, skip the deployment of the project artifacts. To see which
+	 * artifacts will be uploaded use the dryRun property.
+	 *
 	 * @parameter expression="${github.upload.skip}" default-value="false"
 	 */
 	private boolean skipUpload;
 
 	/**
+	 * Allows to see which artifacts will be deployed to the download
+	 * section of the configured github repository (these artifacts will
+	 * not be uploaded).
+	 *
 	 * @parameter expression="${dryRun}" default-value="false"
 	 */
 	private boolean dryRun;
