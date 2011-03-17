@@ -15,6 +15,7 @@
  */
 package com.github.maven.plugin;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -134,28 +135,31 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 	 * @throws MojoExecutionException if artifacts are not properly configured.
 	 */
 	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
-		final Log log = getLog();
 		final GithubClient githubClient = new GithubClientImpl( login, token );
 
-		log.info( "" );
+		getLog().info( "" );
 		for ( Artifact artifact : artifacts ) {
-			if ( artifact.getFile() == null ) {
-				throw new MojoExecutionException( "Missing <file> into artifact configuration " );
+			String artifactName = artifact.getName();
+			String artifactDescription = artifact.getDescription();
+			File artifactFile = artifact.getFile();
+
+			//verify that the artifact defined a valid file
+			if ( artifactFile == null || !artifactFile.exists() || artifactFile.isDirectory() ) {
+				throw new MojoExecutionException(
+						"Missing <file> definition or the defined file doesn't exist or is a directory"
+				);
 			}
 
-			log.info( "Uploading " + artifact );
+			//upload or replace the artifact
+			getLog().info( "Uploading " + artifact );
 			if ( artifact.getOverride() ) {
-				githubClient.replace(
-						artifact.getName(), artifact.getFile(), artifact.getDescription(), repository
-				);
+				githubClient.replace( artifactName, artifactFile, artifactDescription, repository );
 			}
 			else {
-				githubClient.upload(
-						artifact.getName(), artifact.getFile(), artifact.getDescription(), repository
-				);
+				githubClient.upload( artifactName, artifactFile, artifactDescription, repository );
 			}
 		}
-		log.info( "" );
+		getLog().info( "" );
 	}
 }
 
