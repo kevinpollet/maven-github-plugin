@@ -27,7 +27,7 @@ import org.apache.maven.plugin.logging.Log;
  */
 public final class LoggerHelper {
 
-	private Log logger;
+	private final Log logger;
 
 	/**
 	 * Constructs an instance of logger helper.
@@ -38,15 +38,32 @@ public final class LoggerHelper {
 		this.logger = logger;
 	}
 
+	/**
+	 * Displays the given list as a sequence
+	 * of info message.
+	 *
+	 * @param lineFormat The line format.
+	 * @param list The list to display.
+	 *
+	 * @see String#format(String, Object...)
+	 */
 	public void info(String lineFormat, Set<?> list) {
 		for ( Object o : list ) {
 			info( lineFormat, o );
 		}
 	}
 
+	/**
+	 * Displays the given info message.
+	 *
+	 * @param format The format string.
+	 * @param args The format string arguments.
+	 *
+	 * @see String#format(String, Object...)
+	 */
 	public void info(String format, Object... args) {
 		if ( logger.isInfoEnabled() ) {
-			String message = String.format( format, args );
+			final String message = String.format( format, args );
 			logger.info( message );
 		}
 	}
