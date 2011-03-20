@@ -21,15 +21,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.codehaus.plexus.util.DirectoryScanner;
+
 import com.github.maven.plugin.client.GithubClient;
 import com.github.maven.plugin.client.exceptions.GithubArtifactAlreadyExistException;
 import com.github.maven.plugin.client.exceptions.GithubArtifactNotFoundException;
 import com.github.maven.plugin.client.exceptions.GithubException;
 import com.github.maven.plugin.client.exceptions.GithubRepositoryNotFoundException;
 import com.github.maven.plugin.client.impl.GithubClientImpl;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * Deploys artifacts to the download section of
@@ -75,6 +76,13 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 	 * @parameter
 	 */
 	private Artifact[] artifacts;
+	
+	/**
+	 * Sets default override behavior when uploading artifacts, used when artifact.override is not set. By default is false.
+	 * 
+	 * @parameter expression="${github.overrideArtifacts}" default-value="false"
+	 */
+	private boolean overrideArtifacts;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		if ( !skipUpload ) {
@@ -94,11 +102,12 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 
 					//add main artifact
 					if ( includedFiles.contains( mavenProject.getArtifact().getFile().getName() ) ) {
+						boolean shouldOverride = mavenProject.getArtifact().isSnapshot() || overrideArtifacts;
 						githubArtifacts.add(
 								new Artifact(
 										mavenProject.getArtifact().getFile(),
 										projectDescription,
-										mavenProject.getArtifact().isSnapshot()
+										shouldOverride
 								)
 						);
 					}
@@ -106,11 +115,12 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 					//add attached artifacts
 					for ( org.apache.maven.artifact.Artifact attachedArtifact : mavenProject.getAttachedArtifacts() ) {
 						if ( includedFiles.contains( attachedArtifact.getFile().getName() ) ) {
+							boolean shouldOverride = attachedArtifact.isSnapshot() || overrideArtifacts;
 							githubArtifacts.add(
 									new Artifact(
 											attachedArtifact.getFile(),
 											projectDescription,
-											attachedArtifact.isSnapshot()
+											shouldOverride
 									)
 							);
 						}
