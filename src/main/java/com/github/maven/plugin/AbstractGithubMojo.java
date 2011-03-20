@@ -17,7 +17,9 @@ package com.github.maven.plugin;
 
 import java.util.List;
 
+import com.github.maven.plugin.util.LoggerHelper;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Proxy;
 
@@ -57,4 +59,15 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	 * @required
 	 */
 	protected String repository;
+
+	/**
+	 * Logger utility class.
+	 */
+	protected LoggerHelper loggerHelper;
+
+	@Override
+	public void setLog(Log log) {
+		super.setLog( log );
+		loggerHelper = new LoggerHelper( log );
+	}
 }

@@ -148,7 +148,6 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 	private void uploadArtifacts(Artifact... artifacts) throws MojoExecutionException {
 		final GithubClient githubClient = new GithubClientImpl( login, token );
 
-		getLog().info( "" );
 		for ( Artifact artifact : artifacts ) {
 			String artifactName = artifact.getName();
 			String artifactDescription = artifact.getDescription();
@@ -161,9 +160,9 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 				);
 			}
 
-			getLog().info( "Uploading " + artifact );
-			if ( !dryRun ) {
-				//upload or replace the artifact
+			loggerHelper.info( "Uploading %s to %s", artifact, repository );
+
+			if ( !dryRun ) { //upload or replace the artifact
 				if ( artifact.getOverride() ) {
 					githubClient.replace( artifactName, artifactFile, artifactDescription, repository );
 				}
@@ -172,7 +171,6 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 				}
 			}
 		}
-		getLog().info( "" );
 	}
 }
 

@@ -40,25 +40,19 @@ import org.apache.maven.plugin.logging.Log;
 public final class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		final Log logger = getLog();
 		final GithubClient githubClient = new GithubClientImpl( login, token );
 
 		try {
 
 			final Set<String> artifacts = githubClient.listAvailableDownloads( repository );
 
-			logger.info( "" );
 			if ( artifacts.isEmpty() ) {
-				logger.info( "No available downloads for [" + repository + "]" );
+				loggerHelper.info( "No downloads are available for repository %s", repository );
 			}
 			else {
-				logger.info( "Available downloads for [" + repository + "]" );
-				logger.info( "" );
-				for ( String download : artifacts ) {
-					getLog().info( "* " + download );
-				}
+				loggerHelper.info( "Available downloads for repository %s", repository );
+				loggerHelper.info( "- %s", artifacts );
 			}
-			logger.info( "" );
 
 		}
 		catch ( GithubRepositoryNotFoundException e ) {
