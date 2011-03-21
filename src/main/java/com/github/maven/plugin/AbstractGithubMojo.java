@@ -34,22 +34,6 @@ public abstract class AbstractGithubMojo extends AbstractMojo {
 	protected MavenProject mavenProject;
 
 	/**
-	 * The github login (must have write access to the github repository).
-	 *
-	 * @parameter expression="${github.login}"
-	 * @required
-	 */
-	protected String login;
-
-	/**
-	 * The github token corresponding to the given login.
-	 *
-	 * @parameter expression="${github.token}"
-	 * @required
-	 */
-	protected String token;
-
-	/**
 	 * The repository url (eg: https://github.com/kevinpollet/maven-github-plugin).
 	 *
 	 * @parameter expression="${github.repository}"

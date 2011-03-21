@@ -18,6 +18,7 @@ package com.github.maven.plugin.client.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -59,6 +60,13 @@ public class GithubClientImpl implements GithubClient {
 	private final String token;
 
 	/**
+	 * Constructs a client
+	 */
+	public GithubClientImpl() {
+		this( null, null );
+	}
+
+	/**
 	 * Constructs a github client for the given
 	 * login and token.
 	 *
@@ -73,7 +81,58 @@ public class GithubClientImpl implements GithubClient {
 
 	public Set<String> listAvailableDownloads(String repositoryUrl) {
 		assertStartsWith( repositoryUrl, GITHUB_REPOSITORY_URL_PREFIX, "repositoryUrl" );
-		return retrieveDownloadsInfos( repositoryUrl ).keySet();
+
+		final Set<String> downloads = new HashSet<String>();
+		final GetMethod githubGet = new GetMethod( toRepositoryDownloadUrl( repositoryUrl ) );
+
+		int response;
+
+		try {
+
+			response = httpClient.executeMethod( githubGet );
+		}
+		catch ( IOException e ) {
+			throw new GithubRepositoryNotFoundException(
+					"Cannot retrieve github repository " + repositoryUrl + " informations", e
+			);
+		}
+
+		if ( response == HttpStatus.SC_OK ) {
+
+			String githubResponse;
+
+			try {
+
+				githubResponse = githubGet.getResponseBodyAsString();
+			}
+			catch ( IOException e ) {
+				throw new GithubRepositoryNotFoundException(
+						"Cannot retrieve github repository " + repositoryUrl + "  informations", e
+				);
+			}
+
+			Pattern pattern = Pattern.compile(
+					String.format(
+							"<a href=\"/downloads%s/?([^\"]+)\"", removeGithubUrlPart( repositoryUrl )
+					)
+			);
+
+			Matcher matcher = pattern.matcher( githubResponse );
+			while ( matcher.find() ) {
+				downloads.add( matcher.group( 1 ) );
+			}
+
+		}
+		else if ( response == HttpStatus.SC_NOT_FOUND ) {
+			throw new GithubRepositoryNotFoundException( "Cannot found repository " + repositoryUrl );
+		}
+		else {
+			throw new GithubRepositoryNotFoundException( "Cannot retrieve github repository " + repositoryUrl + " informations" );
+		}
+
+		githubGet.releaseConnection();
+
+		return downloads;
 	}
 
 	public void upload(String artifactName, File file, String description, String repositoryUrl) {

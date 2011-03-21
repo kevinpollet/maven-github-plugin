@@ -40,7 +40,7 @@ import org.apache.maven.plugin.logging.Log;
 public final class ListGithubRepositoryArtifactMojo extends AbstractGithubMojo {
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		final GithubClient githubClient = new GithubClientImpl( login, token );
+		final GithubClient githubClient = new GithubClientImpl();
 
 		try {
 

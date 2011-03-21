@@ -84,6 +84,22 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 	 */
 	private Artifact[] artifacts;
 
+	/**
+	 * The github login (must have write access to the github repository).
+	 *
+	 * @parameter expression="${github.login}"
+	 * @required
+	 */
+	protected String login;
+
+	/**
+	 * The github token corresponding to the given login.
+	 *
+	 * @parameter expression="${github.token}"
+	 * @required
+	 */
+	protected String token;
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		if ( !skipUpload ) {
 			try {
