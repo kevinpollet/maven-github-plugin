@@ -57,7 +57,7 @@ Without any artifact configuration (see _Specify artifacts to upload_) the plugi
 		</excludes>
 	</configuration>
 	
-**Note:** With the default configuration only artifacts with a **Snapshot** version are overridden. 	
+**Note:** With the default configuration only artifacts with a **Snapshot** version are overridden. If you want to modify this default behavior you could use the parameter `<overrideArtifacts>`. 	
 	
 #### Specify the artifacts to upload
 
