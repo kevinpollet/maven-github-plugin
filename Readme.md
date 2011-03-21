@@ -1,7 +1,7 @@
 Maven Github Plugin
 ===================
 
->Current version: __1.0-SNAPSHOT__
+>Current version: __1.0.0.Beta1__
 
 >__This Maven plugin is under development. Consequently, doesn't use it inside your production project (the project goals and parameters can change during it's development).__
 
