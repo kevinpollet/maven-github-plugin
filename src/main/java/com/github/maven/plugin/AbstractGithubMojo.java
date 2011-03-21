@@ -15,13 +15,10 @@
  */
 package com.github.maven.plugin;
 
-import java.util.List;
-
 import com.github.maven.plugin.util.LoggerHelper;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.settings.Proxy;
 
 /**
  * The Abstract Github Mojo.
