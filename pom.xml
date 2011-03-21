@@ -74,9 +74,6 @@
     </properties>
 
     <dependencies>
-        <!--
-            Plugin API
-        -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
@@ -87,10 +84,6 @@
             <artifactId>maven-core</artifactId>
             <version>3.0.2</version>
         </dependency>
-
-        <!--
-            Utils
-        -->
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -112,7 +105,6 @@
             <version>2.0.5</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -197,5 +189,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

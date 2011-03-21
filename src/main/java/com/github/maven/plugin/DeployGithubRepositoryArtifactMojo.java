@@ -62,7 +62,8 @@ public final class DeployGithubRepositoryArtifactMojo extends AbstractGithubMojo
 	private boolean dryRun;
 
 	/**
-	 * Sets default override behavior when uploading artifacts, used when artifact.override is not set. By default is false.
+	 * Sets default override behavior when uploading artifacts, used when
+	 * artifact.override is not set. By default is false.
 	 *
 	 * @parameter expression="${github.overrideArtifacts}" default-value="false"
 	 */
