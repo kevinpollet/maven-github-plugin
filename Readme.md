@@ -10,8 +10,8 @@ What is it ?
 
 For each Github repository there is a download section which allows people to download project tags. Sometimes project has distribution artifacts which provide a functionnal application out of the box. This maven plugin allows you to deploy your project ditribution assemblies to the repository download section during the build process.
 
-How to use it ?
----------------
+How use it ?
+------------
 
 ### Plugin Repository
 
@@ -26,8 +26,10 @@ To add the _maven-github-plugin_ in your project just add the following lines:
    	 	   <plugin>
    	 	       <groupId>com.github.maven.plugin</groupId>
    	 	       <artifactId>maven-github-plugin</artifactId>
-   	 	       <version>PLUGIN_VERSION</version>
-   	 	       //Plugin configuration
+   	 	       <version>1.0.0.Beta1</version>
+			   <configuration>
+   	 	       		//Define the plugin configuration. See sections below.
+			   </configuration>			
    	 	   </plugin>
 		</plugins>
 	</build>
@@ -51,7 +53,7 @@ Without any artifact configuration (see _Specify artifacts to upload_) the plugi
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
 		<token>YOUR_GITHUB_TOKEN</token>
-		<repository>YOUR_GITHUB_REPOSITORY_URL</repository> (eg: https://github.com/kevinpollet/maven-github-plugin)
+		<repository>1.0.0.Beta1</repository> (eg: https://github.com/kevinpollet/maven-github-plugin)
 		<excludes>
 			<exclude>*.zip</exclude>
 		</excludes>
@@ -66,7 +68,7 @@ To specify artifacts which have to be uploaded to the repository download sectio
 	<configuration>
 		<login>YOUR_GITHUB_LOGIN</login>
 		<token>YOUR_GITHUB_TOKEN</token>
-		<repository>YOUR_GITHUB_REPOSITORY_URL</repository> (eg: https://github.com/kevinpollet/maven-github-plugin)
+		<repository>1.0.0.Beta1</repository> (eg: https://github.com/kevinpollet/maven-github-plugin)
 		<artifacts>
 			<artifact>
 				<file>ABSOLUTE_FILE_PATH</file>
@@ -84,10 +86,8 @@ This aim of this goal is just to list the available github repository downloads.
 	<plugin>
 		<groupId>com.github.maven.plugin</groupId>
 		<artifactId>maven-github-plugin</artifactId>
-		<version>PLUGIN_VERSION</version>
+		<version>1.0.0.Beta1</version>
 		<configuration>
-			<login>YOUR_GITHUB_LOGIN</login>
-			<token>YOUR_GITHUB_TOKEN</token>
 			<repository>YOUR_GITHUB_REPOSITORY_URL</repository> (eg: https://github.com/kevinpollet/maven-github-plugin)
 		</configuration>
 	</plugin>
@@ -107,8 +107,7 @@ FAQ
 
 ### How keep your github token secret ?
 
-> A system property is associated to github **token** (and also for github **login**). You can define it in the `settings.xml` file or by specifying the property on the command line like 
-`mvn clean deploy -Dgithub.token=YOUR_GITHUB_TOKEN`.
+> A system property is associated to github **token** (and also for github **login**). You can define it in the `settings.xml` file or by specifying the property on the command line like`mvn clean deploy -Dgithub.token=YOUR_GITHUB_TOKEN`.
 
 ### How invoke this plugin goals with it's prefix ?
  
@@ -125,7 +124,7 @@ How contribute
 
 ### Reporting a Bug / Requesting a Feature
 
-To report an issue or request a new feature you just have to open an issue in the repository issue tracker (<https://github.com/kevinpollet/maven-github-plugin/issues>). After that you can add a label to it. Currently there is two label __Bug__ and __Feature__.
+To report an issue or request a new feature you just have to open an issue in the repository issue tracker (<https://github.com/kevinpollet/maven-github-plugin/issues>).
 
 ### Contributing some code
 
