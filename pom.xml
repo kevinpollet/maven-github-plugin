@@ -175,7 +175,7 @@
                 <configuration>
                     <failIfMissing>true</failIfMissing>
                     <strictCheck>true</strictCheck>
-                    <header>Licence.txt</header>
+                    <header>License.txt</header>
                     <headerDefinitions>
                         <headerDefinition>${project.basedir}/etc/javaLicenceHeader.xml</headerDefinition>
                     </headerDefinitions>
